@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.sentra.LoginActivity
+import com.example.sentra.ManageCamerasActivity
 import com.example.sentra.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -58,13 +59,8 @@ class SettingsFragment : Fragment() {
 
         btnManageCameras.setOnClickListener {
             // كود الانتقال لصفحة الكاميرات
-            Toast.makeText(context, "Navigating to Camera Settings...", Toast.LENGTH_SHORT).show()
-
-            // مثال لو عندك Fragment تانية للكاميرات:
-            // parentFragmentManager.beginTransaction()
-            //    .replace(R.id.fragmentContainer, ManageCamerasFragment())
-            //    .addToBackStack(null) // عشان لما يرجع يرجع للإعدادات
-            //    .commit()
+            val intent = Intent(requireContext(), ManageCamerasActivity::class.java)
+            startActivity(intent)
         }
 
         btnChangePassword.setOnClickListener {
@@ -84,5 +80,6 @@ class SettingsFragment : Fragment() {
              startActivity(intent)
              activity?.finish()
         }
+
     }
 }
