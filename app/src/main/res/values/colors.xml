@@ -5,4 +5,12 @@
     <color name="blue">#155DFC</color>
     <color name="blueLight">#2196F3</color>
     <color name="grey">#666666</color>
+    <color name="alert_red_main">#ffa3a3</color>
+    <color name="alert_red_bg">#FEE2E2</color>
+
+    <color name="alert_orange_main">#F97316</color>
+    <color name="alert_orange_bg">#FFEDD5</color>
+
+    <color name="alert_yellow_main">#EAB308</color>
+    <color name="alert_yellow_bg">#FEF9C3</color>
 </resources>

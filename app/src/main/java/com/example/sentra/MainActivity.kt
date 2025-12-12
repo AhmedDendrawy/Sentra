@@ -1,5 +1,6 @@
 package com.example.sentra
 
+import AlertsFragment
 import HomeFragment
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

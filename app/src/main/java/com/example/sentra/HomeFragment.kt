@@ -21,7 +21,7 @@ class HomeFragment : Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.rvCameras)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // تجهيز بيانات وهمية (Dummy Data)
+        //  (Dummy Data)
         val cameras = listOf(
             CameraItem("Front Door", "Main Entrance", "Last incident: 2 hours ago", true),
             CameraItem("Parking Lot", "Outside", "Last incident: No incidents", true),
