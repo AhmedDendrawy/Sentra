@@ -1,25 +1,27 @@
+package com.example.sentra
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sentra.CameraItem
-import com.example.sentra.R
 
-class CameraAdapter(private val cameraList: List<CameraItem>) :
-    RecyclerView.Adapter<CameraAdapter.CameraViewHolder>() {
+// 1. ضيفنا (private val onItemClick: (CameraItem) -> Unit)
+class CameraAdapter(
+    private val cameraList: List<CameraItem>,
+    private val onItemClick: (CameraItem) -> Unit
+) : RecyclerView.Adapter<CameraAdapter.CameraViewHolder>() {
 
     class CameraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.findViewById(R.id.tvCameraName)
         val tvLocation: TextView = itemView.findViewById(R.id.tvLocation)
         val tvLastIncident: TextView = itemView.findViewById(R.id.tvLastIncident)
-        val imgStatus: ImageView = itemView.findViewById(R.id.imgStatus) // تأكد إنك غيرت ID في XML لـ imgStatus
+        val imgStatus: ImageView = itemView.findViewById(R.id.imgStatus) // تأكد من الـ ID في XML
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CameraViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_camera, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_camera, parent, false)
         return CameraViewHolder(view)
     }
 
@@ -30,11 +32,16 @@ class CameraAdapter(private val cameraList: List<CameraItem>) :
         holder.tvLocation.text = item.location
         holder.tvLastIncident.text = item.lastIncident
 
-        // تغيير الصورة بناءً على الحالة
+        // كود تغيير الأيقونة حسب الحالة
         if (item.isOnline) {
-            holder.imgStatus.setImageResource(R.drawable.statues_online) // لازم تكون ضفت الصورة دي
+            holder.imgStatus.setImageResource(R.drawable.statues_online) // تأكد إن الصورة موجودة
         } else {
-            holder.imgStatus.setImageResource(R.drawable.statues_offline) // لازم تكون ضفت الصورة دي
+            holder.imgStatus.setImageResource(R.drawable.statues_offline) // تأكد إن الصورة موجودة
+        }
+
+        // 2. تفعيل الضغط: لما تضغط على الكارت، شغل الدالة وخد معاك بيانات الكاميرا
+        holder.itemView.setOnClickListener {
+            onItemClick(item)
         }
     }
 

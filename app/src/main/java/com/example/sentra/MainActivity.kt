@@ -2,6 +2,7 @@ package com.example.sentra
 
 import AlertsFragment
 import HomeFragment
+import SettingsFragment
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity

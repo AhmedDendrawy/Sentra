@@ -1,59 +1,88 @@
-package com.example.sentra
-
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
+import com.example.sentra.LoginActivity
+import com.example.sentra.R
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.switchmaterial.SwitchMaterial
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        // ربط ملف XML بالكود
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // --- 1. تعريف العناصر (Initialize Views) ---
+        // لاحظ: استخدمنا IDs اللي كتبناها في XML
+
+        val switchNotif = view.findViewById<SwitchMaterial>(R.id.switchNotifications)
+        val switchSounds = view.findViewById<SwitchMaterial>(R.id.switchSounds)
+
+        // الأزرار هنا عبارة عن ConstraintLayout لأننا صممنا الزرار بنفسنا
+        val btnManageCameras = view.findViewById<ConstraintLayout>(R.id.btnManageCameras)
+        val btnChangePassword = view.findViewById<ConstraintLayout>(R.id.btnChangePassword)
+
+        val btnLogout = view.findViewById<MaterialButton>(R.id.btnLogOut)
+
+
+        // --- 2. برمجة الـ Switches (Preferences) ---
+
+        switchNotif.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                Toast.makeText(context, "Notifications Enabled", Toast.LENGTH_SHORT).show()
+                // هنا ممكن تضيف كود لحفظ الإعدادات
+            } else {
+                Toast.makeText(context, "Notifications Disabled", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        switchSounds.setOnCheckedChangeListener { _, isChecked ->
+            val message = if (isChecked) "Sounds ON" else "Sounds OFF"
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
+
+
+        // --- 3. برمجة أزرار التنقل (Management) ---
+
+        btnManageCameras.setOnClickListener {
+            // كود الانتقال لصفحة الكاميرات
+            Toast.makeText(context, "Navigating to Camera Settings...", Toast.LENGTH_SHORT).show()
+
+            // مثال لو عندك Fragment تانية للكاميرات:
+            // parentFragmentManager.beginTransaction()
+            //    .replace(R.id.fragmentContainer, ManageCamerasFragment())
+            //    .addToBackStack(null) // عشان لما يرجع يرجع للإعدادات
+            //    .commit()
+        }
+
+        btnChangePassword.setOnClickListener {
+            Toast.makeText(context, "Open Change Password Screen", Toast.LENGTH_SHORT).show()
+            // نفس فكرة الانتقال السابقة
+        }
+
+
+        // --- 4. برمجة زر الخروج (Logout) ---
+
+        btnLogout.setOnClickListener {
+            // هنا بتكتب كود مسح بيانات اليوزر والرجوع لصفحة الدخول
+            Toast.makeText(context, "Logging Out...", Toast.LENGTH_SHORT).show()
+
+            // مثال:
+             val intent = Intent(activity, LoginActivity::class.java)
+             startActivity(intent)
+             activity?.finish()
+        }
     }
 }
