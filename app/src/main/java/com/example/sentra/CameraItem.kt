@@ -8,5 +8,6 @@ data class CameraItem(
     val name: String,
     val location: String,
     val lastIncident: String,
-    val isOnline: Boolean
+    val isOnline: Boolean,
+    var rtspUrl: String = ""
 ) : Parcelable

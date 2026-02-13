@@ -1,5 +1,6 @@
 package com.example.sentra
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
@@ -25,15 +26,19 @@ class ManageCamerasActivity : AppCompatActivity() {
 
         // ربط الأدابتـر ببيانات الـ Repository
         adapter = ManageCamerasAdapter(
-            CamerasRepository.camerasList, // نقرأ من القائمة المشتركة
+            CamerasRepository.camerasList,
 
             onEditClick = { camera ->
-                // كود التعديل (سنضيفه لاحقاً)
-                Toast.makeText(this, "Edit ${camera.name}", Toast.LENGTH_SHORT).show()
+                // 1. نجيب رقم الكاميرا في القائمة (Index)
+                val index = CamerasRepository.camerasList.indexOf(camera)
+
+                // 2. نفتح شاشة التعديل ونبعتلها الرقم
+                val intent = Intent(this, EditCameraActivity::class.java)
+                intent.putExtra("CAMERA_INDEX", index)
+                startActivity(intent)
             },
 
             onDeleteClick = { camera ->
-                // عند الضغط على حذف، نظهر رسالة تأكيد أولاً
                 showDeleteConfirmation(camera)
             }
         )
@@ -54,6 +59,9 @@ class ManageCamerasActivity : AppCompatActivity() {
             // 2. تحديث الشاشة الحالية فوراً
             adapter.notifyDataSetChanged()
 
+            // 3. حفظ التغييرات في الموبايل عشان الكاميرا مترجعش تاني لما نقفل التطبيق (السطر اللي كان ناقص) <--
+            CamerasRepository.saveCameras(this)
+
             Toast.makeText(this, "Deleted Successfully", Toast.LENGTH_SHORT).show()
         }
 
@@ -61,9 +69,16 @@ class ManageCamerasActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
-        // تلوين زر الحذف بالأحمر (اختياري)
+        // تلوين زر الحذف بالأحمر
         val dialog = builder.create()
         dialog.show()
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(android.R.color.holo_red_dark))
+    }
+    // بنضيف الدالة دي عشان تعمل Refresh للقائمة لما ترجع من صفحة التعديل
+    override fun onResume() {
+        super.onResume()
+        if (::adapter.isInitialized) {
+            adapter.notifyDataSetChanged()
+        }
     }
 }
