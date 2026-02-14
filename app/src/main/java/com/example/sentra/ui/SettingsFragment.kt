@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import com.example.sentra.ui.LoginActivity
 import com.example.sentra.ui.ManageCamerasActivity
 import com.example.sentra.R
+import com.example.sentra.databinding.ActivityChangePasswordBinding
+import com.example.sentra.ui.ChangePassword
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 
@@ -64,8 +66,9 @@ class SettingsFragment : Fragment() {
         }
 
         btnChangePassword.setOnClickListener {
-            Toast.makeText(context, "Open Change Password Screen", Toast.LENGTH_SHORT).show()
-            // نفس فكرة الانتقال السابقة
+
+            val intent = Intent(requireContext(), ChangePassword::class.java)
+            startActivity(intent)
         }
 
 
