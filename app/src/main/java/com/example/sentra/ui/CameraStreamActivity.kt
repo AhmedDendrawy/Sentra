@@ -1,7 +1,8 @@
-package com.example.sentra
+package com.example.sentra.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -11,6 +12,8 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.example.sentra.model.CameraItem
+import com.example.sentra.R
 
 class CameraStreamActivity : AppCompatActivity() {
 
@@ -22,7 +25,8 @@ class CameraStreamActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera_stream)
-
+        val btnBack = findViewById<ImageView>(R.id.btnBack)
+        val tvBack = findViewById<TextView>(R.id.tvBack)
         val tvName = findViewById<TextView>(R.id.tvStreamCameraName)
         val tvLocation = findViewById<TextView>(R.id.tvStreamLocation)
 
@@ -44,6 +48,8 @@ class CameraStreamActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please enter a valid URL in Edit Camera", Toast.LENGTH_SHORT).show()
             }
         }
+        btnBack.setOnClickListener { finish() }
+        tvBack.setOnClickListener { finish() }
     }
 
     override fun onStart() {

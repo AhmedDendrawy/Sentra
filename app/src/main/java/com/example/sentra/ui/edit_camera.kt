@@ -1,4 +1,4 @@
-package com.example.sentra
+package com.example.sentra.ui
 
 import android.os.Bundle
 import android.widget.EditText
@@ -6,6 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.sentra.R
+import com.example.sentra.data.CamerasRepository
 import com.google.android.material.button.MaterialButton
 
 class EditCameraActivity : AppCompatActivity() {

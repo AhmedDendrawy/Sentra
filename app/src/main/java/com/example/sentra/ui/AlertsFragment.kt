@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sentra.AlertItem
-import com.example.sentra.AlertType
+import com.example.sentra.model.AlertItem
+import com.example.sentra.model.AlertType
 import com.example.sentra.R
 
 class AlertsFragment : Fragment() {

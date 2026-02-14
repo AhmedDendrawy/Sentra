@@ -1,4 +1,4 @@
-package com.example.sentra
+package com.example.sentra.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sentra.R
+import com.example.sentra.adapters.ManageCamerasAdapter
+import com.example.sentra.data.CamerasRepository
+import com.example.sentra.model.CameraItem
 
 class ManageCamerasActivity : AppCompatActivity() {
 

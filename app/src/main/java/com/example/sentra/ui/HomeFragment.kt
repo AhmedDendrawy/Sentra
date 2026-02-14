@@ -1,4 +1,4 @@
-package com.example.sentra
+package com.example.sentra.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -10,6 +10,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sentra.adapters.CameraAdapter
+import com.example.sentra.model.CameraItem
+import com.example.sentra.data.CamerasRepository
+import com.example.sentra.R
 import com.google.android.material.button.MaterialButton
 
 class HomeFragment : Fragment() {

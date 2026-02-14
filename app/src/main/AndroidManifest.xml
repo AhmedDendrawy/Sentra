@@ -18,19 +18,19 @@
             android:name=".edit_camera"
             android:exported="false" />
         <activity
-            android:name=".ManageCamerasActivity"
+            android:name=".ui.ManageCamerasActivity"
             android:exported="false" />
         <activity
-            android:name=".CameraStreamActivity"
+            android:name=".ui.CameraStreamActivity"
             android:exported="true"></activity>
         <activity
-            android:name=".AddCameraActivity"
+            android:name=".ui.AddCameraActivity"
             android:exported="true" />
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".ui.OnboardingActivity"
             android:exported="true"></activity>
         <activity
-            android:name=".SplashScreen"
+            android:name=".ui.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,15 +39,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUp"
+            android:name=".ui.SignUp"
             android:exported="true" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"></activity>
-        <activity android:name=".EditCameraActivity" />
+        <activity android:name=".ui.EditCameraActivity" />
     </application>
 
 </manifest>

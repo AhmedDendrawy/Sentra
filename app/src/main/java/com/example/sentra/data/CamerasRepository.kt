@@ -1,6 +1,7 @@
-package com.example.sentra
+package com.example.sentra.data
 
 import android.content.Context
+import com.example.sentra.model.CameraItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

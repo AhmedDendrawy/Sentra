@@ -6,8 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sentra.AlertItem
-import com.example.sentra.AlertType
+import com.example.sentra.model.AlertItem
+import com.example.sentra.model.AlertType
 import com.example.sentra.R
 
 class AlertsAdapter(private val alerts: List<AlertItem>) :

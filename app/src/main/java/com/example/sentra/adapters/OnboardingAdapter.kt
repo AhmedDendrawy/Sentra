@@ -1,4 +1,4 @@
-package com.example.sentra
+package com.example.sentra.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sentra.model.OnboardingItem
+import com.example.sentra.R
 
 class OnboardingAdapter(private val items: List<OnboardingItem>) :
     RecyclerView.Adapter<OnboardingAdapter.OnboardingViewHolder>() {

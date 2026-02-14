@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.example.sentra.LoginActivity
-import com.example.sentra.ManageCamerasActivity
+import com.example.sentra.ui.LoginActivity
+import com.example.sentra.ui.ManageCamerasActivity
 import com.example.sentra.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial

@@ -1,4 +1,4 @@
-package com.example.sentra
+package com.example.sentra.model
 
 data class OnboardingItem(
     val title: String,

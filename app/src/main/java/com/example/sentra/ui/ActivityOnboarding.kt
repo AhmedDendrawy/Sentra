@@ -1,13 +1,13 @@
-package com.example.sentra
+package com.example.sentra.ui
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
 import android.widget.Button
 import androidx.viewpager2.widget.ViewPager2
+import com.example.sentra.R
+import com.example.sentra.adapters.OnboardingAdapter
+import com.example.sentra.model.OnboardingItem
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 

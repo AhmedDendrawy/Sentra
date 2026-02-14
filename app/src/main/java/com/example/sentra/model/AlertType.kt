@@ -1,4 +1,4 @@
-package com.example.sentra
+package com.example.sentra.model
 
 enum class AlertType { FIRE, VIOLENCE, ACCIDENT }
 data class AlertItem(

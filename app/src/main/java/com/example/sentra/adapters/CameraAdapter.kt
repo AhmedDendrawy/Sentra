@@ -1,4 +1,4 @@
-package com.example.sentra
+package com.example.sentra.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sentra.model.CameraItem
+import com.example.sentra.R
 
 // 1. ضيفنا (private val onItemClick: (CameraItem) -> Unit)
 class CameraAdapter(

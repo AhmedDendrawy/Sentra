@@ -1,12 +1,13 @@
-package com.example.sentra
+package com.example.sentra.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.sentra.model.CameraItem
+import com.example.sentra.R
 import com.google.android.material.button.MaterialButton
 
 class AddCameraActivity : AppCompatActivity() {
@@ -28,6 +29,7 @@ class AddCameraActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             val name = etName.text.toString()
             val location = etLocation.text.toString()
+            val ipUrl=etIp.text.toString().trim()
 
             if (name.isNotEmpty() && location.isNotEmpty()) {
                 // 1. تجهيز الكاميرا الجديدة
@@ -35,7 +37,9 @@ class AddCameraActivity : AppCompatActivity() {
                     name = name,
                     location = location,
                     lastIncident = "No incidents yet", // قيمة افتراضية
-                    isOnline = true
+                    isOnline = true,
+                    rtspUrl = ipUrl
+
                 )
 
                 // 2. تجهيز البيانات للإرسال
