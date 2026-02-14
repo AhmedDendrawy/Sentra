@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Sentra"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.ChangePassword"
+            android:exported="false" />
+        <activity
             android:name=".edit_camera"
             android:exported="false" />
         <activity
@@ -22,13 +25,13 @@
             android:exported="false" />
         <activity
             android:name=".ui.CameraStreamActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ui.AddCameraActivity"
             android:exported="true" />
         <activity
             android:name=".ui.OnboardingActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ui.SplashScreen"
             android:exported="true">
@@ -46,7 +49,7 @@
             android:exported="true" />
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity android:name=".ui.EditCameraActivity" />
     </application>
 
