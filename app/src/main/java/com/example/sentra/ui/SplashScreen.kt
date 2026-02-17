@@ -16,7 +16,7 @@ class SplashScreen : AppCompatActivity() {
         // تأخير بسيط (مثلاً 2 ثانية) لعرض اللوجو قبل الانتقال
         Handler(Looper.getMainLooper()).postDelayed({
             checkDestination()
-        }, 3000)
+        }, 4000)
     }
 
     private fun checkDestination() {

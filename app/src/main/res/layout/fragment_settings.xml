@@ -171,6 +171,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
+                    android:id="@+id/dividerPref"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="16dp"
@@ -178,25 +179,24 @@
                     app:layout_constraintTop_toBottomOf="@+id/layoutNotifications" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutSounds"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layoutNotifications">
-
-                    <ImageView
-                        android:id="@+id/imgSoundIcon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/bg_circle_shape"
-                        android:backgroundTint="#F3E8FF"
-                        android:padding="8dp"
-                        android:src="@drawable/volume"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="#9333EA" />
+                    app:layout_constraintTop_toBottomOf="@+id/dividerPref"> <ImageView
+                    android:id="@+id/imgSoundIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_circle_shape"
+                    android:backgroundTint="#F3E8FF"
+                    android:padding="8dp"
+                    android:src="@drawable/volume"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#9333EA" />
 
                     <TextView
                         android:id="@+id/tvSoundTitle"
@@ -298,6 +298,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
+                    android:id="@+id/dividerManage"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginHorizontal="16dp"
@@ -313,20 +314,18 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnManageCameras">
-
-                    <ImageView
-                        android:id="@+id/imgPassIcon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/bg_circle_shape"
-                        android:backgroundTint="#FEF9C3"
-                        android:padding="8dp"
-                        android:src="@drawable/key"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="#CA8A04" />
+                    app:layout_constraintTop_toBottomOf="@+id/dividerManage"> <ImageView
+                    android:id="@+id/imgPassIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_circle_shape"
+                    android:backgroundTint="#FEF9C3"
+                    android:padding="8dp"
+                    android:src="@drawable/key"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#CA8A04" />
 
                     <TextView
                         android:id="@+id/tvChangePassword"
@@ -339,7 +338,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imgPassIcon"
                         app:layout_constraintTop_toTopOf="parent" />
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

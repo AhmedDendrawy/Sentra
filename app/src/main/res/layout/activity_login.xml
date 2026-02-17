@@ -12,11 +12,8 @@
         android:id="@+id/imageView2"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="167dp"
-        android:layout_marginTop="130dp"
-        android:layout_marginEnd="167dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/lockicon" />
@@ -25,7 +22,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/inter_regualer"
         android:text="Welcome to Sentra"
         android:textSize="20sp"
@@ -37,7 +34,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/inter_regualer"
         android:text="Sign in to continue"
         android:textColor="#6B6B6B"
@@ -50,21 +47,21 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="308dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/inter_light"
         android:text="Email"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/EmailInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
@@ -92,10 +89,10 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/inter_light"
         android:text="Password"
-        android:layout_marginTop="12dp"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EmailInputLayout" />
@@ -103,10 +100,10 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         app:boxCornerRadiusBottomEnd="16dp"
         app:boxCornerRadiusBottomStart="16dp"
@@ -115,6 +112,7 @@
         app:boxStrokeColor="@color/blue"
         app:endIconMode="password_toggle"
         app:hintTextColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">
 
@@ -134,7 +132,8 @@
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/inter_medium"
@@ -147,49 +146,53 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/loginButton"
-        android:layout_width="329dp"
+        android:layout_width="0dp"
         android:layout_height="61dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:backgroundTint="@color/blue"
         android:elevation="8dp"
-        app:rippleColor="@color/blueLight"
         android:text="Login"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:cornerRadius="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvForgotPassword"
-        app:layout_constraintVertical_bias="0.26" />
+        app:rippleColor="@color/blueLight" />
 
-    <TextView
-        android:id="@+id/tvCreateAccount"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="92dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="  Create new account"
-        android:textColor="#2196F3"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="92dp"
-
-        android:text="Don't have an account?"
-        android:textColor="#808080"
-        android:textSize="16sp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account?"
+            android:textColor="#808080"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvCreateAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Create new account"
+            android:textColor="#2196F3"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

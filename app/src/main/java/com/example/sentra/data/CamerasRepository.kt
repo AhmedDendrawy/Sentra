@@ -15,6 +15,7 @@ object CamerasRepository {
 
     // 1. الدالة دي بنشغلها أول ما التطبيق يفتح عشان تحمل البيانات القديمة
     fun init(context: Context) {
+        camerasList.clear()
         val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val jsonString = sharedPreferences.getString(KEY_CAMERAS, null)
 

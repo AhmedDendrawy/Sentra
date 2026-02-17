@@ -1,70 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF"
     tools:context=".ui.HomeFragment">
 
     <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvWelcomeName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
         android:fontFamily="@font/inter_semibold"
-        android:text="Welcome, Ahmed"
+        android:text="Welcome, user"
         android:textColor="@color/black"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvSubtitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Manage your security cameras"
         android:textColor="#666666"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@id/tvWelcome"
-        app:layout_constraintTop_toBottomOf="@id/tvWelcome" />
+        app:layout_constraintEnd_toEndOf="@+id/tvWelcomeName"
+        app:layout_constraintStart_toStartOf="@id/tvWelcomeName"
+        app:layout_constraintTop_toBottomOf="@id/tvWelcomeName" />
 
     <View
         android:id="@+id/divider"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:background="#E5E7EB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddCamera"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="Add Camera"
         android:textAllCaps="false"
-        android:textSize="20sp"
+        android:textSize="18sp"
         app:backgroundTint="@color/blue"
         app:cornerRadius="12dp"
         app:icon="@drawable/outline_add_24"
         app:iconGravity="textStart"
         app:iconPadding="8dp"
         app:iconSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <LinearLayout
+        android:id="@+id/layoutEmptyState"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAddCamera">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/photo_camera"
+            app:tint="#D1D5DB" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/inter_semibold"
+            android:text="No cameras found"
+            android:textColor="#6B7280"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Click 'Add Camera' to connect one"
+            android:textColor="#9CA3AF"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCameras"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:clipToPadding="false"
         android:paddingBottom="80dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnAddCamera"
         tools:listitem="@layout/item_camera" />
 
