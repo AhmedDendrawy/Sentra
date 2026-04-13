@@ -80,14 +80,16 @@ class SettingsFragment : Fragment() {
 
         // --- 5. برمجة زر الخروج (Logout) ---
         btnLogout.setOnClickListener {
-            Toast.makeText(context, "Logging Out...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Logging Out...", Toast.LENGTH_SHORT).show()
 
-            // مسح البيانات
+            // 1. Clear user token and data
             TokenManager.clearData(requireContext())
-            // 🌟 2. مسح الكاميرات من الذاكرة المؤقتة عشان اليوزر الجديد ميشوفهاش 🌟
+
+            // 2. Clear cameras from RAM so the next user starts fresh
             CamerasRepository.camerasList.clear()
-            // الرجوع لصفحة الدخول ومنع الرجوع للخلف
-            val intent = Intent(activity, LoginActivity::class.java)
+
+            // 3. Navigate back to LoginActivity and prevent going back
+            val intent = Intent(requireActivity(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }

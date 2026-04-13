@@ -12,7 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingEnd="16dp">
 
         <View
             android:id="@+id/viewIndicator"
@@ -40,12 +41,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="@font/inter_semibold"
             android:text="Fire Detected"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cvSnapshot"
             app:layout_constraintStart_toEndOf="@id/imgAlertIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,17 +62,30 @@
             app:layout_constraintStart_toStartOf="@id/tvAlertTitle"
             app:layout_constraintTop_toBottomOf="@id/tvAlertTitle" />
 
+        <TextView
+            android:id="@+id/tvConfidence"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="AI Confidence: 95%"
+            android:textColor="@color/alert_red_main"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/tvAlertTitle"
+            app:layout_constraintStart_toStartOf="@id/tvAlertTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvCameraName" />
+
         <ImageView
             android:id="@+id/imgClock"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:src="@drawable/clock"
+            app:tint="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tvCameraName"
-            app:layout_constraintTop_toBottomOf="@id/tvCameraName"
-            app:tint="@color/grey" />
+            app:layout_constraintStart_toStartOf="@id/tvConfidence"
+            app:layout_constraintTop_toBottomOf="@id/tvConfidence" />
 
         <TextView
             android:id="@+id/tvTime"
@@ -80,10 +94,31 @@
             android:layout_marginStart="8dp"
             android:text="2 hours ago"
             android:textColor="@color/grey"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/imgClock"
             app:layout_constraintStart_toEndOf="@id/imgClock"
-            app:layout_constraintTop_toTopOf="@id/imgClock" />
+            app:layout_constraintTop_toTopOf="@id/imgClock"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvSnapshot"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivSnapshot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="#EEEEEE" />
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

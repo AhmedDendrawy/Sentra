@@ -1,9 +1,9 @@
 package com.example.sentra.adapters
 
-import AlertsFragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.sentra.ui.AlertsFragment
 import com.example.sentra.ui.HomeFragment
 import com.example.sentra.ui.SettingsFragment
 

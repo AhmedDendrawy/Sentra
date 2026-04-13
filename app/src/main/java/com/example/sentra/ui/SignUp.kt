@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.example.sentra.R
 import com.example.sentra.api.RegisterRequest
@@ -15,6 +16,7 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 class SignUp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,10 +29,32 @@ class SignUp : AppCompatActivity() {
         val etConfirmPassword = findViewById<TextInputEditText>(R.id.confirmPassword)
         val btnRegister = findViewById<MaterialButton>(R.id.loginButton2)
         val tvLogin = findViewById<TextView>(R.id.tvCreateAccount3)
+
         val emailInputLayout = findViewById<TextInputLayout>(R.id.EmailInputLayout)
+        val passwordInputLayout = findViewById<TextInputLayout>(R.id.passwordInputLayout)
 
         tvLogin.setOnClickListener {
             finish()
+        }
+
+        // 🌟 Live Validation: Email 🌟
+        etEmail.addTextChangedListener { text ->
+            val email = text.toString().trim()
+            if (email.isNotEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailInputLayout.error = "Invalid email format"
+            } else {
+                emailInputLayout.error = null // Clear error when valid
+            }
+        }
+
+        // 🌟 Live Validation: Password 🌟
+        etPassword.addTextChangedListener { text ->
+            val password = text.toString()
+            if (password.isNotEmpty() && password.length < 8) {
+                passwordInputLayout.error = "At least 8 characters required"
+            } else {
+                passwordInputLayout.error = null // Clear error when valid
+            }
         }
 
         btnRegister.setOnClickListener {
@@ -39,22 +63,28 @@ class SignUp : AppCompatActivity() {
             val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
 
-            // تصفير الخطأ
+            // Reset errors for a fresh check
             emailInputLayout.error = null
+            passwordInputLayout.error = null
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // 🌟 التعديل الأول: الرسالة بالإنجليزي 🌟
+            // Final check just in case they bypassed the live validation
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 emailInputLayout.error = "Please enter a valid email address"
                 return@setOnClickListener
             }
 
+            if (password.length < 8) {
+                passwordInputLayout.error = "Password must be at least 8 characters"
+                return@setOnClickListener
+            }
+
             if (password != confirmPassword) {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                passwordInputLayout.error = "Passwords do not match"
                 return@setOnClickListener
             }
 
@@ -64,26 +94,39 @@ class SignUp : AppCompatActivity() {
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     val request = RegisterRequest(name, email, password)
-                    val response = RetrofitClient.apiService.registerUser(request)
-
+                    val response = RetrofitClient.getApiService(this@SignUp).registerUser(request)
                     withContext(Dispatchers.Main) {
                         btnRegister.isEnabled = true
                         btnRegister.text = "Register"
 
                         if (response.isSuccessful) {
-                            val successMsg = response.body()?.string() ?: "Account Created!"
-                            Toast.makeText(this@SignUp, successMsg, Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@SignUp, "Account Created Successfully!", Toast.LENGTH_LONG).show()
                             finish()
                         } else {
-                            // 🌟 التعديل التاني: الرسالة بالإنجليزي 🌟
-                            emailInputLayout.error = "This email is already registered"
+                            var backendErrorMsg = "Registration failed"
+                            try {
+                                val errorBodyString = response.errorBody()?.string()
+                                if (errorBodyString != null) {
+                                    val jsonObject = JSONObject(errorBodyString)
+                                    if (jsonObject.has("message")) {
+                                        backendErrorMsg = jsonObject.getString("message")
+                                    } else if (jsonObject.has("errors")) {
+                                        backendErrorMsg = jsonObject.getString("errors")
+                                    }
+                                }
+                            } catch (parseException: Exception) {
+                                backendErrorMsg = "Server error code: ${response.code()}"
+                            }
+
+                            Toast.makeText(this@SignUp, backendErrorMsg, Toast.LENGTH_LONG).show()
+                            emailInputLayout.error = "Check your info"
                         }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         btnRegister.isEnabled = true
                         btnRegister.text = "Register"
-                        Toast.makeText(this@SignUp, "Network Error: Please check your internet", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SignUp, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                     }
                 }
             }

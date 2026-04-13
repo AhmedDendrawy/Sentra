@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="All incident notifications"
-        android:textColor="@color/grey"
+        android:textColor="#808080"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@id/tvHeader"
         app:layout_constraintTop_toBottomOf="@id/tvHeader" />
@@ -39,5 +39,45 @@
         android:paddingBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSubHeader"
-        tools:listitem="@layout/item_alert" />
+         />
+
+    <LinearLayout
+        android:id="@+id/layoutEmptyState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSubHeader">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="500dp"
+            android:layout_height="300dp"
+            app:lottie_rawRes="@raw/snoozingbell"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_renderMode="hardware"
+            app:lottie_cacheComposition="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="No alerts yet"
+            android:textColor="#4A4A4A"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="All clear! No incidents detected."
+            android:textColor="#808080"
+            android:textSize="14sp" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

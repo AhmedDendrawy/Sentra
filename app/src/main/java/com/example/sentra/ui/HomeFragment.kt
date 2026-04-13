@@ -1,44 +1,35 @@
 package com.example.sentra.ui
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout // 🌟 ضفنا دي عشان الـ Empty State
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sentra.adapters.CameraAdapter
 import com.example.sentra.model.CameraItem
-import com.example.sentra.data.CamerasRepository
 import com.example.sentra.R
+import com.example.sentra.api.RetrofitClient
 import com.example.sentra.api.TokenManager
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
     private lateinit var adapter: CameraAdapter
-    // 🌟 عرفناهم هنا عشان نستخدمهم في الدالة اللي تحت 🌟
     private lateinit var rvCameras: RecyclerView
     private lateinit var layoutEmptyState: LinearLayout
 
-    // --- (أ) استقبال الكاميرا الجديدة ---
-    private val addCameraLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val newCamera = result.data?.getParcelableExtra<CameraItem>("NEW_CAMERA")
-            if (newCamera != null) {
-                CamerasRepository.camerasList.add(newCamera)
-                adapter.notifyDataSetChanged()
-                updateEmptyState() // 🌟 بنحدث الشاشة فوراً بعد إضافة الكاميرا 🌟
-            }
-        }
-    }
+    // The real list that will be filled from the backend
+    private var camerasList = mutableListOf<CameraItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,18 +37,15 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // 🌟 ربط العناصر بالـ XML 🌟
         rvCameras = view.findViewById(R.id.rvCameras)
         layoutEmptyState = view.findViewById(R.id.layoutEmptyState)
         val btnAdd = view.findViewById<MaterialButton>(R.id.btnAddCamera)
 
-        // --- قراءة الاسم وعرضه ---
         val tvWelcome = view.findViewById<TextView>(R.id.tvWelcomeName)
         val userName = TokenManager.getUserName(requireContext()) ?: "User"
         tvWelcome.text = "Welcome, $userName"
 
-        // --- (ب) إعداد الـ Adapter ---
-        adapter = CameraAdapter(CamerasRepository.camerasList) { clickedCamera ->
+        adapter = CameraAdapter(camerasList) { clickedCamera ->
             val intent = Intent(requireContext(), CameraStreamActivity::class.java)
             intent.putExtra("CAMERA_DATA", clickedCamera)
             startActivity(intent)
@@ -66,35 +54,75 @@ class HomeFragment : Fragment() {
         rvCameras.layoutManager = LinearLayoutManager(context)
         rvCameras.adapter = adapter
 
-        // --- (ج) زر إضافة كاميرا ---
         btnAdd.setOnClickListener {
             val intent = Intent(requireContext(), AddCameraActivity::class.java)
-            addCameraLauncher.launch(intent)
+            startActivity(intent)
         }
-
-        // 🌟 أول ما الشاشة تفتح نعمل الفحص 🌟
-        updateEmptyState()
 
         return view
     }
 
-    // --- (د) تحديث القائمة عند العودة ---
     override fun onResume() {
         super.onResume()
-        adapter.notifyDataSetChanged()
-        updateEmptyState() // 🌟 بنعمل فحص تاني تحسباً لأي تغيير حصل 🌟
+        // Fetch cameras from backend every time the fragment becomes visible
+        fetchCameras()
     }
 
-    // ==========================================
-    // 🌟 الدالة السحرية للتحكم في الشاشة الفاضية 🌟
-    // ==========================================
+    private fun fetchCameras() {
+        val token = TokenManager.getToken(requireContext())
+
+        // 1. Check if token exists before making the call
+        if (token.isNullOrEmpty()) {
+            updateEmptyState()
+            return
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = RetrofitClient.getApiService(requireContext()).getCameras()
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        // 2. Success! Even if body is empty, we handle it gracefully
+                        val cameras = response.body()
+                        camerasList.clear()
+                        if (cameras != null) {
+                            camerasList.addAll(cameras)
+                        }
+                        adapter.notifyDataSetChanged()
+                        updateEmptyState()
+                    } else if (response.code() == 401) {
+                        // 3. Token expired or invalid - Redirect to login if necessary
+                        handleUnauthorized()
+                    } else {
+                        // 4. Other server errors (only show toast for actual bugs)
+                        if (response.code() != 404) {
+                            Toast.makeText(requireContext(), "Server error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        }
+                        updateEmptyState()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    // Network errors (like no internet) - handle silently or with a subtle UI
+                    updateEmptyState()
+                }
+            }
+        }
+    }
+
+    private fun handleUnauthorized() {
+        // Optional: Clear token and send user back to login activity
+        // val intent = Intent(requireContext(), LoginActivity::class.java)
+        // intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        // startActivity(intent)
+    }
+
     private fun updateEmptyState() {
-        if (CamerasRepository.camerasList.isEmpty()) {
-            // لو اللستة فاضية: أظهر رسمة "لا توجد كاميرات" واخفي اللستة
+        if (camerasList.isEmpty()) {
             layoutEmptyState.visibility = View.VISIBLE
             rvCameras.visibility = View.GONE
         } else {
-            // لو اللستة فيها كاميرات: اخفي الرسمة وأظهر اللستة
             layoutEmptyState.visibility = View.GONE
             rvCameras.visibility = View.VISIBLE
         }

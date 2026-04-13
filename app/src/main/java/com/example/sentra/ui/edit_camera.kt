@@ -6,79 +6,95 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.sentra.R
-import com.example.sentra.data.CamerasRepository
+import com.example.sentra.api.RetrofitClient
+import com.example.sentra.model.CameraItem
+import com.example.sentra.model.UpdateCameraRequest
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EditCameraActivity : AppCompatActivity() {
 
-    private var cameraIndex: Int = -1
+    private var cameraItem: CameraItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // تأكد إن اسم ملف الـ XML بتاعك هو نفسه ده
         setContentView(R.layout.activity_edit_camera)
 
-        // 1. استقبال الـ Index بتاع الكاميرا من الصفحة اللي فاتت
-        cameraIndex = intent.getIntExtra("CAMERA_INDEX", -1)
+        // 1. استلام بيانات الكاميرا بالكامل (بدل الـ Index)
+        cameraItem = intent.getParcelableExtra("CAMERA_DATA")
 
-        // لو فيه خطأ ومفيش كاميرا اتبعتت، اقفل الصفحة
-        if (cameraIndex == -1 || cameraIndex >= CamerasRepository.camerasList.size) {
+        if (cameraItem == null) {
             Toast.makeText(this, "Camera not found!", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
 
-        // 2. نجيب الكاميرا من المخزن
-        val currentCamera = CamerasRepository.camerasList[cameraIndex]
-
-        // 3. تعريف العناصر (استخدمنا الـ IDs بتاعتك بالظبط)
+        // 2. تعريف العناصر (نفس الـ IDs اللي في ملفك)
         val btnBack = findViewById<ImageView>(R.id.btnBack)
-        val tvBack = findViewById<TextView>(R.id.tvTitle) // لاحظ إن الـ ID بتاع كلمة Back عندك اسمه tvTitle
-
+        val tvBack = findViewById<TextView>(R.id.tvTitle)
         val etName = findViewById<EditText>(R.id.etCameraName)
-        val etIp = findViewById<EditText>(R.id.etCameraIp) // عدلناها حسب الـ XML
+        val etIp = findViewById<EditText>(R.id.etCameraIp)
         val etLocation = findViewById<EditText>(R.id.etLocation)
-        val btnSave = findViewById<MaterialButton>(R.id.btnSaveCamera) // عدلناها حسب الـ XML
+        val btnSave = findViewById<MaterialButton>(R.id.btnSaveCamera)
 
-        // 4. عرض البيانات الحالية للكاميرا في الحقول
-        etName.setText(currentCamera.name)
-        etLocation.setText(currentCamera.location)
-        etIp.setText(currentCamera.rtspUrl)
+        // 3. عرض البيانات الحالية
+        etName.setText(cameraItem?.name)
+        etLocation.setText(cameraItem?.location)
+        etIp.setText(cameraItem?.streamURL)
 
-        // زر الرجوع (سواء داس على السهم أو كلمة Back)
         btnBack.setOnClickListener { finish() }
         tvBack.setOnClickListener { finish() }
 
-        // 5. زر الحفظ
+        // 4. زر الحفظ (التعديل في السيرفر)
         btnSave.setOnClickListener {
-            val newName = etName.text.toString().trim()
-            val newUrl = etIp.text.toString().trim()
-            val newLocation = etLocation.text.toString().trim()
+            val name = etName.text.toString().trim()
+            val location = etLocation.text.toString().trim()
+            val streamUrl = etIp.text.toString().trim()
 
-            // التأكد إن الاسم مش فاضي
-            if (newName.isEmpty()) {
-                etName.error = "Name is required"
+            if (name.isEmpty() || streamUrl.isEmpty()) {
+                Toast.makeText(this, "Please fill required fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // إنشاء نسخة جديدة من الكاميرا بالبيانات المتحدثة
-            val updatedCamera = currentCamera.copy(
-                name = newName,
-                location = newLocation,
-                rtspUrl = newUrl
-            )
+            updateCamera(name, location, streamUrl, btnSave)
+        }
+    }
 
-            // استبدال القديمة بالجديدة في المخزن
-            CamerasRepository.camerasList[cameraIndex] = updatedCamera
+    private fun updateCamera(name: String, location: String, streamUrl: String, btn: MaterialButton) {
+        // تجهيز الطلب (Request)
+        val request = UpdateCameraRequest(name, location, streamUrl)
 
-            // حفظ التغييرات في الموبايل للأبد
-            CamerasRepository.saveCameras(this)
+        btn.isEnabled = false
+        btn.text = "Saving..."
 
-            Toast.makeText(this, "Camera updated successfully", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                // مناداة الـ API باستخدام الـ ID بتاع الكاميرا
+                val response = RetrofitClient.getApiService(this@EditCameraActivity)
+                    .updateCamera(cameraItem!!.cameraId, request)
 
-            // قفل شاشة التعديل والرجوع للصفحة اللي قبلها
-            finish()
+                withContext(Dispatchers.Main) {
+                    btn.isEnabled = true
+                    btn.text = "Save Changes"
+
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@EditCameraActivity, "Updated Successfully!", Toast.LENGTH_SHORT).show()
+                        finish() // الرجوع بعد النجاح
+                    } else {
+                        Toast.makeText(this@EditCameraActivity, "Failed to update", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    btn.isEnabled = true
+                    btn.text = "Save Changes"
+                    Toast.makeText(this@EditCameraActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

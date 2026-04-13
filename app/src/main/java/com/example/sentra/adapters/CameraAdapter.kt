@@ -32,16 +32,17 @@ class CameraAdapter(
 
         holder.tvName.text = item.name
         holder.tvLocation.text = item.location
-        holder.tvLastIncident.text = item.lastIncident
 
-        // كود تغيير الأيقونة حسب الحالة
-        if (item.isOnline) {
-            holder.imgStatus.setImageResource(R.drawable.statues_online) // تأكد إن الصورة موجودة
+        // Use the status from the backend instead of the old lastIncident
+        holder.tvLastIncident.text = "Status: ${item.status}"
+
+        // The backend returns a string for status (e.g., "Active", "Offline")
+        if (item.status.equals("Active", ignoreCase = true)) {
+            holder.imgStatus.setImageResource(R.drawable.statues_online)
         } else {
-            holder.imgStatus.setImageResource(R.drawable.statues_offline) // تأكد إن الصورة موجودة
+            holder.imgStatus.setImageResource(R.drawable.statues_offline)
         }
 
-        // 2. تفعيل الضغط: لما تضغط على الكارت، شغل الدالة وخد معاك بيانات الكاميرا
         holder.itemView.setOnClickListener {
             onItemClick(item)
         }
