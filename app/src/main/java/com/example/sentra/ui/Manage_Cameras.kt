@@ -40,7 +40,7 @@ class ManageCamerasActivity : AppCompatActivity() {
         adapter = ManageCamerasAdapter(
             camerasList,
             onEditClick = { camera ->
-                // Here we send the whole camera object to the Edit screen
+
                 val intent = Intent(this, EditCameraActivity::class.java)
                 intent.putExtra("CAMERA_DATA", camera)
                 startActivity(intent)
@@ -55,7 +55,7 @@ class ManageCamerasActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Always fetch fresh data when returning to this screen
+
         fetchCameras()
     }
 

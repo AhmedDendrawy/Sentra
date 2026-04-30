@@ -12,12 +12,13 @@ object RetrofitClient {
     fun getApiService(context: Context): ApiService {
 
         val okHttpClient = OkHttpClient.Builder()
+            .protocols(listOf(okhttp3.Protocol.HTTP_1_1))
             .addInterceptor { chain ->
-                // 🌟 ضفنا trim() عشان لو فيه أي مسافة مخفية في أول أو آخر التوكن تتمسح
+
                 val token = TokenManager.getToken(context)?.trim()
 
                 val requestBuilder = chain.request().newBuilder()
-                    // 🌟 ضفنا Accept عشان بعض سيرفرات ASP.NET بترفض الريكويست من غيرها
+
                     .addHeader("Accept", "application/json")
 
                 if (!token.isNullOrEmpty()) {
@@ -26,7 +27,7 @@ object RetrofitClient {
 
                 val request = requestBuilder.build()
 
-                // طباعة تفاصيل الريكويست قبل ما يروح
+
                 android.util.Log.d("SENTRA_DEBUG", "🚀 Sending to: ${request.url()}")
                 android.util.Log.d("SENTRA_DEBUG", "🔑 Header Auth: ${request.header("Authorization")}")
 

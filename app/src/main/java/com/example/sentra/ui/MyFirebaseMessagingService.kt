@@ -17,7 +17,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     // الدالة دي بتشتغل أول ما الإشعار يوصل للموبايل
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-
+        android.util.Log.d("SENTRA_FCM", "🚨🚨 استلمت حاجة من فايربيز: ${remoteMessage.data}")
         // بنجيب العنوان والنص من الإشعار اللي مبعوت من فايربيز
         val title = remoteMessage.notification?.title ?: "تنبيه من Sentra"
         val message = remoteMessage.notification?.body ?: "يوجد تحديث جديد"

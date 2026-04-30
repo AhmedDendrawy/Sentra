@@ -37,7 +37,7 @@ class SignUp : AppCompatActivity() {
             finish()
         }
 
-        // 🌟 Live Validation: Email 🌟
+
         etEmail.addTextChangedListener { text ->
             val email = text.toString().trim()
             if (email.isNotEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -47,7 +47,7 @@ class SignUp : AppCompatActivity() {
             }
         }
 
-        // 🌟 Live Validation: Password 🌟
+
         etPassword.addTextChangedListener { text ->
             val password = text.toString()
             if (password.isNotEmpty() && password.length < 8) {
@@ -63,7 +63,7 @@ class SignUp : AppCompatActivity() {
             val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
 
-            // Reset errors for a fresh check
+
             emailInputLayout.error = null
             passwordInputLayout.error = null
 

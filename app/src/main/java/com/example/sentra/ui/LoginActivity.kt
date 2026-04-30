@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 1. فحص الدخول التلقائي (لو اليوزر مسجل دخول قبل كده وعنده توكن)
+
         if (TokenManager.getToken(this) != null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_login)
 
-        // 2. ربط عناصر الشاشة (View Binding)
+
         val etEmail = findViewById<TextInputEditText>(R.id.editTextEmail)
         val etPassword = findViewById<TextInputEditText>(R.id.editTextPassword)
         val btnLogin = findViewById<MaterialButton>(R.id.loginButton)
@@ -46,9 +46,9 @@ class LoginActivity : AppCompatActivity() {
         val emailInputLayout = findViewById<TextInputLayout>(R.id.EmailInputLayout)
         val passwordInputLayout = findViewById<TextInputLayout>(R.id.passwordInputLayout)
 
-        // 3. أزرار التنقل الفرعية
+
         tvSignUp.setOnClickListener {
-            val intent = Intent(this, SignUp::class.java) // اتأكد إن اسم كلاس الـ SignUp عندك كده
+            val intent = Intent(this, SignUp::class.java)
             startActivity(intent)
         }
 

@@ -15,14 +15,11 @@ class MainActivity : AppCompatActivity() {
         CamerasRepository.init(this)
         setContentView(R.layout.activity_main)
 
-        // 1. تعريف العناصر
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
-        val viewPager = findViewById<ViewPager2>(R.id.viewPager) // تأكد إنك ضفت ViewPager2 في الـ XML
+        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
 
-        // 2. تشغيل الموزع (Adapter)
         viewPager.adapter = MainPagerAdapter(this)
 
-        // 3. لما تضغط على زرار تحت -> يغير الشاشة بالسحب
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> viewPager.currentItem = 0
@@ -32,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        // 4. لما تسحب الشاشة بصباعك يمين وشمال -> يغير الزرار اللي منور تحت
+
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

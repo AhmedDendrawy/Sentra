@@ -9,6 +9,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -45,10 +46,15 @@ interface ApiService {
         @Path("id") cameraId: Int
     ): Response<ResponseBody>
 
-    // جلب كل التنبيهات/الحوادث من الذكاء الاصطناعي
     @GET("api/incidents")
     suspend fun getIncidents(): Response<List<AlertItem>>
 
     @POST("api/auth/refresh")
     fun refreshToken(@Body request: RefreshRequest): retrofit2.Call<RefreshResponse>
+
+    @POST("api/user/change-password")
+    suspend fun changePassword(
+        @Header("Authorization") token: String,
+        @Body request: ChangePasswordRequest
+    ): Response<GenericResponse>
 }

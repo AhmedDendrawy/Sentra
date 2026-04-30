@@ -10,21 +10,24 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy // 🌟 الإمبورت ده ضفناه عشان الكاش
 import com.example.sentra.R
 import com.example.sentra.model.AlertItem
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class AlertsAdapter(
     private var alerts: List<AlertItem>,
-    private val onAlertClick: (AlertItem) -> Unit // عشان لو حبيت تفتح شاشة تفاصيل بعدين
+    private val onAlertClick: (AlertItem) -> Unit
 ) : RecyclerView.Adapter<AlertsAdapter.AlertViewHolder>() {
 
     class AlertViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTitle: TextView = itemView.findViewById(R.id.tvAlertTitle)
         val tvCamera: TextView = itemView.findViewById(R.id.tvCameraName)
         val tvTime: TextView = itemView.findViewById(R.id.tvTime)
-        val tvConfidence: TextView = itemView.findViewById(R.id.tvConfidence) // 🌟 الجديد
+        val tvConfidence: TextView = itemView.findViewById(R.id.tvConfidence)
         val imgIcon: ImageView = itemView.findViewById(R.id.imgAlertIcon)
-        val ivSnapshot: ImageView = itemView.findViewById(R.id.ivSnapshot) // 🌟 الجديد
+        val ivSnapshot: ImageView = itemView.findViewById(R.id.ivSnapshot)
         val viewIndicator: View = itemView.findViewById(R.id.viewIndicator)
     }
 
@@ -37,33 +40,43 @@ class AlertsAdapter(
         val item = alerts[position]
         val context = holder.itemView.context
 
-        // 1. ربط النصوص
-        holder.tvTitle.text = item.type // السيرفر بيبعت النوع كـ String (Fire, Violence)
-        holder.tvCamera.text = "Camera: ${item.cameraName ?: "Unknown"}"
-        holder.tvTime.text = item.time
-        holder.tvConfidence.text = "AI Confidence: ${item.confidenceScore}%"
+        holder.tvTitle.text = item.type
 
-        // 2. تحميل صورة الحادثة باستخدام Glide
+        // 🌟 قراءة اسم الكاميرا
+        holder.tvCamera.text = "Camera: ${item.camera?.name ?: "Unknown"}"
+
+        // فرمتة الوقت
+        holder.tvTime.text = formatIncidentTime(item.time)
+
+        // نسبة الثقة
+        val score = (item.confidenceScore * 100).toInt()
+        holder.tvConfidence.text = "AI Confidence: $score%"
+
+        // 🌟 تجميع لينك الصورة وعرضها في الكارت
+        val imageUrl = "https://sentra.runasp.net${item.snapshotPath ?: ""}"
+
+        // 🚀 التعديل هنا: تسريع التحميل وتقليل سحب النت والرامات
         Glide.with(context)
-            .load(item.snapshotUrl)
+            .load(imageUrl)
+            .diskCacheStrategy(DiskCacheStrategy.ALL) // بيحفظها في الموبايل عشان متتحملش تاني
+            .thumbnail(0.25f) // بيعرض نسخة سريعة (25%) لحد ما الأصلية تحمل
             .centerCrop()
             .into(holder.ivSnapshot)
 
-        // 3. تلوين الشريط والأيقونة حسب النوع (بدون Enum)
-        // بنستخدم lowercase() عشان لو السيرفر بعت "FIRE" أو "Fire" يشتغل عادي
+        // تلوين الأيقونات حسب نوع الحادثة
         when (item.type.lowercase()) {
             "fire" -> setColors(context, holder, R.color.alert_red_main, R.drawable.fire)
-            "violence" -> setColors(context, holder, R.color.alert_orange_main, R.drawable.violence) // تأكد من اسم الأيقونة
-            "accident" -> setColors(context, holder, R.color.alert_yellow_main, R.drawable.accident) // تأكد من اسم الأيقونة
-            else -> setColors(context, holder, R.color.grey, R.drawable.fire) // حالة افتراضية
+            "violence" -> setColors(context, holder, R.color.alert_orange_main, R.drawable.violence)
+            "accident" -> setColors(context, holder, R.color.alert_yellow_main, R.drawable.accident)
+            else -> setColors(context, holder, R.color.grey, R.drawable.fire)
         }
 
-        // 4. السحر هنا 🌟: تكبير الصورة لما اليوزر يضغط عليها
+        // 🌟 الضغط لتكبير الصورة (بنباصي اللينك للدالة)
         holder.ivSnapshot.setOnClickListener {
-            showImagePreviewDialog(context, item.snapshotUrl)
+            showImagePreviewDialog(context, imageUrl)
         }
 
-        // 5. الضغط على الكارت كله
+        // الضغط على الكارت كله
         holder.itemView.setOnClickListener {
             onAlertClick(item)
         }
@@ -75,30 +88,52 @@ class AlertsAdapter(
         holder.imgIcon.setImageResource(iconRes)
     }
 
-    // دالة إنشاء وإظهار الـ Dialog اللي بيكبر الصورة
+    private fun formatIncidentTime(apiTime: String?): String {
+        if (apiTime.isNullOrEmpty()) return "Unknown time"
+        return try {
+            val cleanTime = apiTime.replace("Z", "")
+            val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US)
+            val date = parser.parse(cleanTime)
+            val formatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
+            formatter.format(date!!)
+        } catch (e: Exception) {
+            apiTime
+        }
+    }
+
+    // 🌟 الدالة الجديدة النظيفة لتكبير الصورة من اللينك مباشرة
     private fun showImagePreviewDialog(context: Context, imageUrl: String) {
-        // بنعمل ImageView بالكود بدل ما نعمل ملف XML جديد
+        // 1. إعداد الـ ImageView
         val imageView = ImageView(context).apply {
-            scaleType = ImageView.ScaleType.FIT_CENTER
             adjustViewBounds = true
-            setPadding(0, 32, 0, 32)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            minimumHeight = 800 // عشان الصورة تاخد مساحة كويسة
         }
 
-        // بنحمل الصورة جواه
+        // 2. تحميل الصورة باللينك فوراً
+        // 🚀 التعديل هنا: هيقرأ الصورة من الكاش اللي اتحفظت فيه من بره في لمح البصر
         Glide.with(context)
             .load(imageUrl)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(imageView)
 
-        // بنعرضه في Dialog
-        AlertDialog.Builder(context)
-            .setView(imageView)
-            .setPositiveButton("Close", null)
-            .show()
+        // 3. بناء الديالوج وعرضه
+        val builder = AlertDialog.Builder(context)
+        builder.setView(imageView)
+        builder.setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+
+        val dialog = builder.create()
+        dialog.show()
+
+        // 4. ضبط أبعاد الديالوج ليملا العرض
+        dialog.window?.setLayout(
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
 
     override fun getItemCount() = alerts.size
 
-    // دالة لتحديث اللستة لما الداتا تيجي من السيرفر
     fun updateData(newAlerts: List<AlertItem>) {
         alerts = newAlerts
         notifyDataSetChanged()

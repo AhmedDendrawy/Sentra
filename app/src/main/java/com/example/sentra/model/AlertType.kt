@@ -1,15 +1,31 @@
 package com.example.sentra.model
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class AlertItem(
-    val id: Int = 0, // لو السيرفر بيبعت ID للحادثة
-    val cameraId: Int = 0,
-    val cameraName: String? = "Unknown Camera",
-    val type: String, // خليناها String بدل Enum عشان السيرفر
+    val incidentId: Int = 0,
+    val type: String,
+
+    @SerializedName("timestamp")
     val time: String,
-    val confidenceScore: Double, // 🌟 المتغير اللي كان ناقص
-    val snapshotUrl: String // 🌟 اللينك بتاع الصورة
+
+    val confidenceScore: Double,
+
+    // 🌟 غيرنا اسم الحقل عشان يقرا اللينك اللي جاي من السيرفر
+    @SerializedName("snapshotPath")
+    val snapshotPath: String?,
+
+    // 🌟 ضفنا الكاميرا كـ Object عشان نقرا الاسم من جواها
+    val camera: CameraInfo?
+) : Parcelable
+
+// 🌟 كلاس جديد عشان يقرا بيانات الكاميرا اللي جوه الحادثة
+@Parcelize
+data class CameraInfo(
+    val cameraId: Int,
+    val name: String?,
+    val location: String?
 ) : Parcelable

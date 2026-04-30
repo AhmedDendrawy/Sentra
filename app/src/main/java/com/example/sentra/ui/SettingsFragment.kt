@@ -30,21 +30,21 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 🌟 --- 1. جلب بيانات اليوزر وعرضها (الاسم والإيميل) --- 🌟
-        // (تأكد إنك مدي الـ TextViews دي الـ IDs دي في ملف fragment_settings.xml)
+
+
         val tvUserName = view.findViewById<TextView>(R.id.tvUserName)
         val tvUserEmail = view.findViewById<TextView>(R.id.tvUserEmail)
 
-        // نقرأ البيانات من الخزنة
+
         val name = TokenManager.getUserName(requireContext()) ?: "User"
         val email = TokenManager.getUserEmail(requireContext()) ?: "user@example.com"
 
-        // نعرضهم في الشاشة
+
         tvUserName.text = name
         tvUserEmail.text = email
-        // 🌟 -------------------------------------------------- 🌟
 
-        // --- 2. تعريف باقي العناصر ---
+
+
         val switchNotif = view.findViewById<SwitchMaterial>(R.id.switchNotifications)
         val switchSounds = view.findViewById<SwitchMaterial>(R.id.switchSounds)
 

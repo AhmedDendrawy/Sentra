@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +23,7 @@ class AlertsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutEmptyState: LinearLayout
+    private lateinit var progressBar: ProgressBar // 🌟 تعريف عجلة التحميل
     private lateinit var adapter: AlertsAdapter
     private var alertsList = mutableListOf<AlertItem>()
 
@@ -33,39 +35,42 @@ class AlertsFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.rvAlerts)
         layoutEmptyState = view.findViewById(R.id.layoutEmptyState)
+        progressBar = view.findViewById(R.id.progressBar) // 🌟 ربط التحميل
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // 1. تعريف الأدابتر وحل الإيرور (ضفنا الأقواس بتاعت الـ Click Listener)
         adapter = AlertsAdapter(alertsList) { clickedAlert ->
-            // الكود هنا هيتنفذ لو اليوزر داس على الكارت نفسه (مش الصورة)
-            // هنبقى نخليه يفتح شاشة تفاصيل لو حبيت
+            // Click action
         }
         recyclerView.adapter = adapter
 
-        // 2. جلب الحوادث من السيرفر فوراً أول ما الشاشة تفتح
         fetchIncidents()
 
         return view
     }
 
     private fun fetchIncidents() {
+        // 🌟 إظهار التحميل وإخفاء باقي الشاشة قبل الريكويست
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        layoutEmptyState.visibility = View.GONE
+
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             try {
-                // بنكلم الـ API اللي إنت لسه ضايفه
                 val response = RetrofitClient.getApiService(requireContext()).getIncidents()
 
                 withContext(Dispatchers.Main) {
+                    // 🌟 إخفاء التحميل أول ما الداتا توصل
+                    progressBar.visibility = View.GONE
+
                     if (response.isSuccessful && response.body() != null) {
                         alertsList.clear()
                         alertsList.addAll(response.body()!!)
 
-                        // بنبعت الداتا الجديدة للأدابتر
                         adapter.updateData(alertsList)
                         updateEmptyState()
                     } else {
                         updateEmptyState()
-                        // لو التوكن خلصان أو فيه مشكلة
                         if(response.code() == 401) {
                             Toast.makeText(context, "Session expired, please login again", Toast.LENGTH_SHORT).show()
                         }
@@ -73,14 +78,14 @@ class AlertsFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
+                    // 🌟 إخفاء التحميل لو حصل خطأ في النت
+                    progressBar.visibility = View.GONE
                     updateEmptyState()
-                    // Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    // دالة التحكم في الرسمة الباهتة (Empty State)
     private fun updateEmptyState() {
         if (alertsList.isEmpty()) {
             recyclerView.visibility = View.GONE

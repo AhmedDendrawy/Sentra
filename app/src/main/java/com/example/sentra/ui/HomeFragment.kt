@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -27,8 +28,8 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: CameraAdapter
     private lateinit var rvCameras: RecyclerView
     private lateinit var layoutEmptyState: LinearLayout
+    private lateinit var progressBar: ProgressBar // 🌟 تعريف عجلة التحميل
 
-    // The real list that will be filled from the backend
     private var camerasList = mutableListOf<CameraItem>()
 
     override fun onCreateView(
@@ -39,6 +40,7 @@ class HomeFragment : Fragment() {
 
         rvCameras = view.findViewById(R.id.rvCameras)
         layoutEmptyState = view.findViewById(R.id.layoutEmptyState)
+        progressBar = view.findViewById(R.id.progressBar) // 🌟 ربط التحميل
         val btnAdd = view.findViewById<MaterialButton>(R.id.btnAddCamera)
 
         val tvWelcome = view.findViewById<TextView>(R.id.tvWelcomeName)
@@ -64,26 +66,31 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        // Fetch cameras from backend every time the fragment becomes visible
         fetchCameras()
     }
 
     private fun fetchCameras() {
         val token = TokenManager.getToken(requireContext())
 
-        // 1. Check if token exists before making the call
         if (token.isNullOrEmpty()) {
             updateEmptyState()
             return
         }
+
+        // 🌟 إظهار التحميل وإخفاء باقي الشاشة قبل الريكويست
+        progressBar.visibility = View.VISIBLE
+        rvCameras.visibility = View.GONE
+        layoutEmptyState.visibility = View.GONE
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val response = RetrofitClient.getApiService(requireContext()).getCameras()
 
                 withContext(Dispatchers.Main) {
+                    // 🌟 إخفاء التحميل أول ما الداتا توصل
+                    progressBar.visibility = View.GONE
+
                     if (response.isSuccessful) {
-                        // 2. Success! Even if body is empty, we handle it gracefully
                         val cameras = response.body()
                         camerasList.clear()
                         if (cameras != null) {
@@ -92,10 +99,9 @@ class HomeFragment : Fragment() {
                         adapter.notifyDataSetChanged()
                         updateEmptyState()
                     } else if (response.code() == 401) {
-                        // 3. Token expired or invalid - Redirect to login if necessary
                         handleUnauthorized()
+                        updateEmptyState()
                     } else {
-                        // 4. Other server errors (only show toast for actual bugs)
                         if (response.code() != 404) {
                             Toast.makeText(requireContext(), "Server error: ${response.code()}", Toast.LENGTH_SHORT).show()
                         }
@@ -104,7 +110,8 @@ class HomeFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    // Network errors (like no internet) - handle silently or with a subtle UI
+                    // 🌟 إخفاء التحميل لو حصل خطأ في النت
+                    progressBar.visibility = View.GONE
                     updateEmptyState()
                 }
             }
@@ -113,9 +120,6 @@ class HomeFragment : Fragment() {
 
     private fun handleUnauthorized() {
         // Optional: Clear token and send user back to login activity
-        // val intent = Intent(requireContext(), LoginActivity::class.java)
-        // intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        // startActivity(intent)
     }
 
     private fun updateEmptyState() {
