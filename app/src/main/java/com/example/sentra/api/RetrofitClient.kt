@@ -1,7 +1,9 @@
 package com.example.sentra.api
 
 import android.content.Context
+import android.util.Log
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -12,13 +14,10 @@ object RetrofitClient {
     fun getApiService(context: Context): ApiService {
 
         val okHttpClient = OkHttpClient.Builder()
-            .protocols(listOf(okhttp3.Protocol.HTTP_1_1))
+            .protocols(listOf(Protocol.HTTP_1_1))
             .addInterceptor { chain ->
-
                 val token = TokenManager.getToken(context)?.trim()
-
                 val requestBuilder = chain.request().newBuilder()
-
                     .addHeader("Accept", "application/json")
 
                 if (!token.isNullOrEmpty()) {
@@ -27,25 +26,20 @@ object RetrofitClient {
 
                 val request = requestBuilder.build()
 
+                Log.d("SENTRA_DEBUG", "🚀 Sending to: ${request.url()}")
+                Log.d("SENTRA_DEBUG", "🔑 Header Auth: ${request.header("Authorization")}")
 
-                android.util.Log.d("SENTRA_DEBUG", "🚀 Sending to: ${request.url()}")
-                android.util.Log.d("SENTRA_DEBUG", "🔑 Header Auth: ${request.header("Authorization")}")
-
-                // إرسال الريكويست واستقبال الرد
                 val response = chain.proceed(request)
 
-                // طباعة كود الرد عشان نتأكد
-                android.util.Log.d("SENTRA_DEBUG", "📥 Response Code: ${response.code()}")
+                Log.d("SENTRA_DEBUG", "📥 Response Code: ${response.code()}")
                 response
             }
-            // 🌟 التعديل هنا: ربط المفتش السري بالـ Client 🌟
             .authenticator(TokenAuthenticator(context))
             .build()
 
-        // 2. بناء الـ Retrofit باستخدام الـ Client الجديد
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okHttpClient) // هنا الـ Client بقى جواه الإنترسبتور والمفتش مع بعض
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

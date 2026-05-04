@@ -1,51 +1,46 @@
 package com.example.sentra.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sentra.model.CameraItem
 import com.example.sentra.R
+import com.example.sentra.data.model.CameraItem
+import com.example.sentra.databinding.ItemCameraBinding
 
-// 1. ضيفنا (private val onItemClick: (CameraItem) -> Unit)
 class CameraAdapter(
-    private val cameraList: List<CameraItem>,
+    private val cameraList: MutableList<CameraItem>,
     private val onItemClick: (CameraItem) -> Unit
 ) : RecyclerView.Adapter<CameraAdapter.CameraViewHolder>() {
 
-    class CameraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvName: TextView = itemView.findViewById(R.id.tvCameraName)
-        val tvLocation: TextView = itemView.findViewById(R.id.tvLocation)
-        val tvLastIncident: TextView = itemView.findViewById(R.id.tvLastIncident)
-        val imgStatus: ImageView = itemView.findViewById(R.id.imgStatus) // تأكد من الـ ID في XML
-    }
+    class CameraViewHolder(val binding: ItemCameraBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CameraViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_camera, parent, false)
-        return CameraViewHolder(view)
+        val binding = ItemCameraBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CameraViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CameraViewHolder, position: Int) {
         val item = cameraList[position]
 
-        holder.tvName.text = item.name
-        holder.tvLocation.text = item.location
+        holder.binding.tvCameraName.text = item.name
+        holder.binding.tvLocation.text = item.location
+        holder.binding.tvLastIncident.text = "Status: ${item.status}"
 
-        // Use the status from the backend instead of the old lastIncident
-        holder.tvLastIncident.text = "Status: ${item.status}"
-
-        // The backend returns a string for status (e.g., "Active", "Offline")
         if (item.status.equals("Active", ignoreCase = true)) {
-            holder.imgStatus.setImageResource(R.drawable.statues_online)
+            holder.binding.imgStatus.setImageResource(R.drawable.statues_online)
         } else {
-            holder.imgStatus.setImageResource(R.drawable.statues_offline)
+            holder.binding.imgStatus.setImageResource(R.drawable.statues_offline)
         }
 
-        holder.itemView.setOnClickListener {
+        holder.binding.root.setOnClickListener {
             onItemClick(item)
         }
+    }
+
+    fun updateData(newCameras: List<CameraItem>) {
+        cameraList.clear()
+        cameraList.addAll(newCameras)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = cameraList.size

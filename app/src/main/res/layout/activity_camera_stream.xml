@@ -13,14 +13,14 @@
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:padding="8dp"
-        android:src="@drawable/outline_arrow_back_24"
-        app:tint="#FFFFFF"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
+        android:padding="8dp"
+        android:src="@drawable/outline_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#FFFFFF" />
 
     <TextView
         android:id="@+id/tvBack"
@@ -81,11 +81,12 @@
 
         <androidx.media3.ui.PlayerView
             android:id="@+id/playerView"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:use_controller="false"
             app:resize_mode="fit"
-            app:surface_type="surface_view" />
+            app:surface_type="texture_view"
+            app:use_controller="false" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -116,13 +117,13 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:background="@drawable/bg_circle_dark"
-                android:padding="14dp"
-                android:src="@drawable/photo_camera"
-                app:tint="#FFFFFF"
+                android:backgroundTint="#333333"
                 android:clickable="true"
                 android:contentDescription="Take screenshot"
                 android:focusable="true"
-                android:backgroundTint="#333333"/>
+                android:padding="14dp"
+                android:src="@drawable/photo_camera"
+                app:tint="#FFFFFF" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -145,12 +146,12 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:background="@drawable/bg_circle_dark"
-                android:padding="14dp"
-                android:src="@drawable/fullscreen"
-                app:tint="#FFFFFF"
+                android:backgroundTint="#333333"
                 android:clickable="true"
                 android:focusable="true"
-                android:backgroundTint="#333333"/>
+                android:padding="14dp"
+                android:src="@drawable/fullscreen"
+                app:tint="#FFFFFF" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -172,12 +173,12 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:background="@drawable/bg_circle_dark"
-                android:padding="14dp"
-                android:src="@drawable/refresh"
-                app:tint="#FFFFFF"
+                android:backgroundTint="#333333"
                 android:clickable="true"
                 android:focusable="true"
-                android:backgroundTint="#333333"/>
+                android:padding="14dp"
+                android:src="@drawable/refresh"
+                app:tint="#FFFFFF" />
 
             <TextView
                 android:layout_width="wrap_content"

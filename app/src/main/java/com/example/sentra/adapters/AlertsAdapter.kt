@@ -2,17 +2,16 @@ package com.example.sentra.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy // 🌟 الإمبورت ده ضفناه عشان الكاش
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.sentra.R
-import com.example.sentra.model.AlertItem
+import com.example.sentra.data.model.AlertItem
+import com.example.sentra.databinding.ItemAlertBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -21,49 +20,33 @@ class AlertsAdapter(
     private val onAlertClick: (AlertItem) -> Unit
 ) : RecyclerView.Adapter<AlertsAdapter.AlertViewHolder>() {
 
-    class AlertViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvTitle: TextView = itemView.findViewById(R.id.tvAlertTitle)
-        val tvCamera: TextView = itemView.findViewById(R.id.tvCameraName)
-        val tvTime: TextView = itemView.findViewById(R.id.tvTime)
-        val tvConfidence: TextView = itemView.findViewById(R.id.tvConfidence)
-        val imgIcon: ImageView = itemView.findViewById(R.id.imgAlertIcon)
-        val ivSnapshot: ImageView = itemView.findViewById(R.id.ivSnapshot)
-        val viewIndicator: View = itemView.findViewById(R.id.viewIndicator)
-    }
+    class AlertViewHolder(val binding: ItemAlertBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlertViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_alert, parent, false)
-        return AlertViewHolder(view)
+        val binding = ItemAlertBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return AlertViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AlertViewHolder, position: Int) {
         val item = alerts[position]
         val context = holder.itemView.context
 
-        holder.tvTitle.text = item.type
+        holder.binding.tvAlertTitle.text = item.type
+        holder.binding.tvCameraName.text = "Camera: ${item.camera?.name ?: "Unknown"}"
+        holder.binding.tvTime.text = formatIncidentTime(item.time)
 
-        // 🌟 قراءة اسم الكاميرا
-        holder.tvCamera.text = "Camera: ${item.camera?.name ?: "Unknown"}"
-
-        // فرمتة الوقت
-        holder.tvTime.text = formatIncidentTime(item.time)
-
-        // نسبة الثقة
         val score = (item.confidenceScore * 100).toInt()
-        holder.tvConfidence.text = "AI Confidence: $score%"
+        holder.binding.tvConfidence.text = "AI Confidence: $score%"
 
-        // 🌟 تجميع لينك الصورة وعرضها في الكارت
         val imageUrl = "https://sentra.runasp.net${item.snapshotPath ?: ""}"
 
-        // 🚀 التعديل هنا: تسريع التحميل وتقليل سحب النت والرامات
         Glide.with(context)
             .load(imageUrl)
-            .diskCacheStrategy(DiskCacheStrategy.ALL) // بيحفظها في الموبايل عشان متتحملش تاني
-            .thumbnail(0.25f) // بيعرض نسخة سريعة (25%) لحد ما الأصلية تحمل
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .thumbnail(0.25f)
             .centerCrop()
-            .into(holder.ivSnapshot)
+            .into(holder.binding.ivSnapshot)
 
-        // تلوين الأيقونات حسب نوع الحادثة
         when (item.type.lowercase()) {
             "fire" -> setColors(context, holder, R.color.alert_red_main, R.drawable.fire)
             "violence" -> setColors(context, holder, R.color.alert_orange_main, R.drawable.violence)
@@ -71,21 +54,19 @@ class AlertsAdapter(
             else -> setColors(context, holder, R.color.grey, R.drawable.fire)
         }
 
-        // 🌟 الضغط لتكبير الصورة (بنباصي اللينك للدالة)
-        holder.ivSnapshot.setOnClickListener {
+        holder.binding.ivSnapshot.setOnClickListener {
             showImagePreviewDialog(context, imageUrl)
         }
 
-        // الضغط على الكارت كله
-        holder.itemView.setOnClickListener {
+        holder.binding.root.setOnClickListener {
             onAlertClick(item)
         }
     }
 
     private fun setColors(context: Context, holder: AlertViewHolder, mainColorRes: Int, iconRes: Int) {
         val mainColor = ContextCompat.getColor(context, mainColorRes)
-        holder.viewIndicator.setBackgroundColor(mainColor)
-        holder.imgIcon.setImageResource(iconRes)
+        holder.binding.viewIndicator.setBackgroundColor(mainColor)
+        holder.binding.imgAlertIcon.setImageResource(iconRes)
     }
 
     private fun formatIncidentTime(apiTime: String?): String {
@@ -101,23 +82,18 @@ class AlertsAdapter(
         }
     }
 
-    // 🌟 الدالة الجديدة النظيفة لتكبير الصورة من اللينك مباشرة
     private fun showImagePreviewDialog(context: Context, imageUrl: String) {
-        // 1. إعداد الـ ImageView
         val imageView = ImageView(context).apply {
             adjustViewBounds = true
             scaleType = ImageView.ScaleType.FIT_CENTER
-            minimumHeight = 800 // عشان الصورة تاخد مساحة كويسة
+            minimumHeight = 800
         }
 
-        // 2. تحميل الصورة باللينك فوراً
-        // 🚀 التعديل هنا: هيقرأ الصورة من الكاش اللي اتحفظت فيه من بره في لمح البصر
         Glide.with(context)
             .load(imageUrl)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(imageView)
 
-        // 3. بناء الديالوج وعرضه
         val builder = AlertDialog.Builder(context)
         builder.setView(imageView)
         builder.setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
@@ -125,7 +101,6 @@ class AlertsAdapter(
         val dialog = builder.create()
         dialog.show()
 
-        // 4. ضبط أبعاد الديالوج ليملا العرض
         dialog.window?.setLayout(
             android.view.ViewGroup.LayoutParams.MATCH_PARENT,
             android.view.ViewGroup.LayoutParams.WRAP_CONTENT

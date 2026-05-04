@@ -16,25 +16,24 @@
         android:theme="@style/Theme.Sentra"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.ChangePassword"
+            android:name=".ui.auth.ChangePassword"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.camera.ManageCamerasActivity"
             android:exported="false" />
         <activity
-            android:name=".edit_camera"
-            android:exported="false" />
-        <activity
-            android:name=".ui.ManageCamerasActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.CameraStreamActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:name=".ui.camera.CameraStreamActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.AddCameraActivity"
+            android:name=".ui.camera.AddCameraActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.OnboardingActivity"
+            android:name=".ui.onboarding.OnboardingActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.SplashScreen"
+            android:name=".ui.onboarding.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,17 +42,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.SignUp"
+            android:name=".ui.auth.SignUp"
             android:exported="true" />
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".ui.auth.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true" />
-        <activity android:name=".ui.EditCameraActivity" />
+        <activity android:name=".ui.camera.EditCameraActivity" />
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".service.MyFirebaseMessagingService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

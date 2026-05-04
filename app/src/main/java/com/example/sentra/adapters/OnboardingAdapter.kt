@@ -1,33 +1,25 @@
 package com.example.sentra.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sentra.model.OnboardingItem
-import com.example.sentra.R
+import com.example.sentra.data.model.OnboardingItem
+import com.example.sentra.databinding.ItemOnboardingBinding
 
 class OnboardingAdapter(private val items: List<OnboardingItem>) :
     RecyclerView.Adapter<OnboardingAdapter.OnboardingViewHolder>() {
 
-    inner class OnboardingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val ivOnboarding = view.findViewById<ImageView>(R.id.ivOnboarding)
-        private val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
-        private val tvDescription = view.findViewById<TextView>(R.id.tvDescription)
-
+    inner class OnboardingViewHolder(val binding: ItemOnboardingBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: OnboardingItem) {
-            tvTitle.text = item.title
-            tvDescription.text = item.description
-            ivOnboarding.setImageResource(item.imageRes)
+            binding.tvTitle.text = item.title
+            binding.tvDescription.text = item.description
+            binding.ivOnboarding.setImageResource(item.imageRes)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnboardingViewHolder {
-        return OnboardingViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_onboarding, parent, false)
-        )
+        val binding = ItemOnboardingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return OnboardingViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: OnboardingViewHolder, position: Int) {
