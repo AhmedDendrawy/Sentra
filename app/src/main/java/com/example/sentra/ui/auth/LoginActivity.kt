@@ -2,6 +2,7 @@ package com.example.sentra.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -80,6 +81,10 @@ class LoginActivity : AppCompatActivity() {
         if (validateInputs(email, password)) {
             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
                 val fcmToken = if (task.isSuccessful) task.result else ""
+
+                // 🌟 السطر ده اللي ضفناه عشان يطبع التوكن الحقيقي
+                Log.d("MY_REAL_TOKEN", "FCM Token is: $fcmToken")
+
                 viewModel.login(LoginRequest(email, password, fcmToken))
             }
         }

@@ -1,6 +1,7 @@
 package com.example.sentra.ui.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,7 @@ import com.example.sentra.api.RetrofitClient
 import com.example.sentra.data.remote.RegisterRequest
 import com.example.sentra.data.repo.AuthRepository
 import com.example.sentra.databinding.ActivitySignUpBinding
-import com.google.firebase.messaging.FirebaseMessaging // 🌟 الإمبورت الجديد
+import com.google.firebase.messaging.FirebaseMessaging
 
 class SignUp : AppCompatActivity() {
 
@@ -75,6 +76,9 @@ class SignUp : AppCompatActivity() {
             errorMsg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
                 binding.EmailInputLayout.error = "Check your info"
+                // بنرجع الزرار تاني لو حصل إيرور عشان اليوزر يقدر يجرب تاني
+                binding.loginButton2.isEnabled = true
+                binding.loginButton2.text = "Register"
             }
         }
     }
@@ -105,12 +109,15 @@ class SignUp : AppCompatActivity() {
             return
         }
 
-        // 🌟 التعديل هنا: هنسحب توكن فايربيز قبل ما نبعت الريكويست للـ ViewModel
+        binding.loginButton2.isEnabled = false
+        binding.loginButton2.text = "Registering..."
+
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            // لو نجحنا نجيب التوكن هناخده، لو فشل هنبعت String فاضي
             val fcmToken = if (task.isSuccessful) task.result else ""
 
-            // نجهز الريكويست بالداتا كلها بما فيها التوكن الجديد ونبعته
+            // 🌟 السطر ده اللي هيطبعلك التوكن في اللوج كات
+            Log.d("MY_REAL_TOKEN", "FCM Token is: $fcmToken")
+
             val request = RegisterRequest(name, email, password, fcmToken)
             viewModel.register(request)
         }

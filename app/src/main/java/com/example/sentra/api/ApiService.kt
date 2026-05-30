@@ -5,6 +5,7 @@ import com.example.sentra.data.model.AlertItem
 import com.example.sentra.data.model.CameraItem
 import com.example.sentra.data.model.UpdateCameraRequest
 import com.example.sentra.data.remote.ChangePasswordRequest
+import com.example.sentra.data.remote.FcmTokenRequest
 import com.example.sentra.data.remote.GenericResponse
 import com.example.sentra.data.remote.LoginRequest
 import com.example.sentra.data.remote.LoginResponse
@@ -67,4 +68,7 @@ interface ApiService {
 
     @POST("api/user/logout")
     suspend fun logout(@Body request: LogoutRequest): Response<Unit>
+
+    @PATCH("api/user/fcm-token")
+    suspend fun updateFcmToken(@Body request: FcmTokenRequest): Response<Unit>
 }
