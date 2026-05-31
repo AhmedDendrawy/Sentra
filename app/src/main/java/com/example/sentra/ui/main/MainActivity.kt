@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -43,6 +44,25 @@ class MainActivity : AppCompatActivity() {
 
         setupViewPagerAndBottomNav()
         askNotificationPermission()
+
+        // 🌟 بنشيك أول ما التطبيق يفتح من الصفر هل إحنا جايين من الإشعار ولا لأ
+        checkIntentForNotification(intent)
+    }
+
+    // 🌟 الدالة دي مهمة جداً لو التطبيق كان مفتوح بالفعل في الخلفية واليوزر داس على الإشعار
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent) // تحديث الـ Intent بتاع الشاشة
+        checkIntentForNotification(intent)
+    }
+
+    // 🌟 دي الدالة اللي بتفهم "الرسالة السرية" وتنقلك لشاشة الـ Alerts
+    private fun checkIntentForNotification(intent: Intent?) {
+        val target = intent?.getStringExtra("open_fragment")
+        if (target == "alerts") {
+            // بنخلي الـ BottomNav يختار الـ Alerts أوتوماتيك، وهو هيقوم محرك الـ ViewPager معاه
+            binding.bottomNav.selectedItemId = R.id.nav_alerts
+        }
     }
 
     private fun setupViewPagerAndBottomNav() {
