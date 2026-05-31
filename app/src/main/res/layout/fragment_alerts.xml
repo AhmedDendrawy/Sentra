@@ -30,16 +30,23 @@
         app:layout_constraintStart_toStartOf="@id/tvHeader"
         app:layout_constraintTop_toBottomOf="@id/tvHeader" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAlerts"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:clipToPadding="false"
-        android:paddingBottom="80dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSubHeader" />
+        app:layout_constraintTop_toBottomOf="@id/tvSubHeader">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAlerts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="80dp"
+            android:visibility="visible" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/layoutEmptyState"
@@ -81,7 +88,6 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <!-- 🌟 عجلة التحميل ضفناها هنا -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

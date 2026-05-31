@@ -11,24 +11,30 @@ import kotlinx.coroutines.launch
 
 class AlertsViewModel(private val repository: AlertsRepository) : ViewModel() {
 
-    // 1. الداتا (لستة الإشعارات)
     private val _alertsList = MutableLiveData<List<AlertItem>>()
     val alertsList: LiveData<List<AlertItem>> get() = _alertsList
 
-    // 2. حالة التحميل (عشان الـ ProgressBar)
+    // حالة التحميل العادية (الدايرة اللي في النص)
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    // 3. رسائل الخطأ (زي الـ Toast)
+    // 🌟 حالة السحب للتحديث (عشان الدايرة اللي بتنزل من فوق)
+    private val _isRefreshing = MutableLiveData<Boolean>()
+    val isRefreshing: LiveData<Boolean> get() = _isRefreshing
+
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
 
-    fun fetchIncidents() {
-        _isLoading.value = true // شغل التحميل
+    // 🌟 ضفنا متغير isSwipeRefresh عشان نعرف الريكويست جاي منين
+    fun fetchIncidents(isSwipeRefresh: Boolean = false) {
+        if (isSwipeRefresh) {
+            _isRefreshing.value = true
+        } else {
+            _isLoading.value = true
+        }
 
         viewModelScope.launch {
             try {
-                // بيكلم الـ Repository اللي إحنا لسه عاملينه
                 val response = repository.getIncidents()
 
                 if (response.isSuccessful && response.body() != null) {
@@ -43,12 +49,13 @@ class AlertsViewModel(private val repository: AlertsRepository) : ViewModel() {
             } catch (e: Exception) {
                 _errorMessage.value = "Network Error: Check your connection"
             } finally {
-                _isLoading.value = false // اقفل التحميل في كل الحالات
+                // بنقفل علامات التحميل في كل الحالات
+                _isLoading.value = false
+                _isRefreshing.value = false
             }
         }
     }
 
-    // الـ Factory ده ضروري عشان نقدر نبعت الـ Repository للـ ViewModel
     class Factory(private val repository: AlertsRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(AlertsViewModel::class.java)) {
