@@ -61,6 +61,8 @@ class LoginActivity : AppCompatActivity() {
                 TokenManager.saveUserData(this, it.accessToken, it.name, it.email)
                 TokenManager.saveRefreshToken(this, it.refreshToken)
                 Toast.makeText(this, "Welcome ${it.name}!", Toast.LENGTH_SHORT).show()
+
+                // هننقل اليوزر علطول للرئيسية، التوكن خلاص اتبعت مع الـ Login
                 navigateToMain()
             }
         }
@@ -79,11 +81,13 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.editTextPassword.text.toString().trim()
 
         if (validateInputs(email, password)) {
+            setLoadingState(true)
+
+            // 🌟 رجعنا الطريقة الطبيعية: هنسحب التوكن من غير ما نمسح القديم عشان الاتصال يفضل شغال
             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
                 val fcmToken = if (task.isSuccessful) task.result else ""
 
-                // 🌟 السطر ده اللي ضفناه عشان يطبع التوكن الحقيقي
-                Log.d("MY_REAL_TOKEN", "FCM Token is: $fcmToken")
+                Log.d("MY_REAL_TOKEN", "FCM Token sent with Login: $fcmToken")
 
                 viewModel.login(LoginRequest(email, password, fcmToken))
             }

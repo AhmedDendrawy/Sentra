@@ -23,11 +23,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         Log.d("SENTRA_DEBUG", "FCM Message Received! Data: ${remoteMessage.data}")
-        // 🌟 التعديل هنا: بنقرأ من remoteMessage.data مباشرة
-        val title = remoteMessage.data["title"] ?: "Sentra Alert"
-        val message = remoteMessage.data["body"] ?: "New incident detected"
 
-        // الدالة بتاعتك اللي بتبني الإشعار وتعرضه
+        var title = "Sentra Alert"
+        var message = "New incident detected"
+
+        // 1. لو باعتها Data Payload
+        if (remoteMessage.data.isNotEmpty()) {
+            title = remoteMessage.data["title"] ?: title
+            message = remoteMessage.data["body"] ?: message
+        }
+
+        // 2. لو باعتها Notification Payload (ساعات الـ SDK بيجبره يبعتها كده)
+        remoteMessage.notification?.let {
+            title = it.title ?: title
+            message = it.body ?: message
+        }
+
+        // الدالة بتاعتك اللي بتبني الإشعار وتعرضه فوراً
         showNotification(title, message)
     }
 
