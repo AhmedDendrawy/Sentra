@@ -38,7 +38,8 @@ The app is structured using the **MVVM** pattern:
 
 | Login | Home | Alerts | Live Stream |
 | :---: | :---: | :---: | :---: |
-| <img width="200" alt="login" src="https://github.com/user-attachments/assets/10953170-b893-45ed-b10a-3d53c59b3177" /> | <img width="200" alt="home" src="https://github.com/user-attachments/assets/55c25fcd-0570-47de-acab-90cf37cb4737" /> | <img width="200" alt="alerts" src="https://github.com/user-attachments/assets/7f8b3491-9da6-4724-a82e-eaf1b96ca006" /> | <img width="200" alt="liveStream" src="https://github.com/user-attachments/assets/14114538-0477-4dd8-a528-df49a17f15ef" /> |
+| <img width="200" alt="login" src="https://github.com/user-attachments/assets/10953170-b893-45ed-b10a-3d53c59b3177" /> | <img width="200" alt="home" src="https://github.com/user-attachments/assets/55c25fcd-0570-47de-acab-90cf37cb4737" /> | <img width="200" alt="Screenshot 2026-08-06 011934" src="https://github.com/user-attachments/assets/9d29b189-a7e2-4488-9e76-712b0b662704" /> | <img width="200" alt="liveStream" src="https://github.com/user-attachments/assets/14114538-0477-4dd8-a528-df49a17f15ef" /> |
 
 ## 👨‍💻 Developer
 Developed by **Ahmed Dandrawy Sleem** as a BSc Computer Science Graduation Project.
+
