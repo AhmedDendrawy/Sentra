@@ -32,7 +32,7 @@ The app is structured using the **MVVM** pattern:
 
 ## 📸 Screenshots
 
-| Splash Screen | Onboarding 1 | Onboarding 2 | Onboarding 3 |
+| Splash Screen | Onboarding  | Onboarding  | Onboarding |
 | :---: | :---: | :---: | :---: |
 | <img width="200" alt="splash" src="https://github.com/user-attachments/assets/2963a846-4dec-4e39-b87d-be8dbc9dbb25" /> | <img width="200" alt="Screenshot_20260219_192513" src="https://github.com/user-attachments/assets/2c5c71e5-3bf7-4887-a6bf-f1598e037d23" /> | <img width="200" alt="Screenshot_20260219_192506" src="https://github.com/user-attachments/assets/f9fe90de-5da5-4e79-8f4e-2de619e2dca6" /> | <img width="200" alt="Screenshot_20260219_192420" src="https://github.com/user-attachments/assets/5ac4fe74-b5c9-4377-a394-762384c6b78e" /> |
 
