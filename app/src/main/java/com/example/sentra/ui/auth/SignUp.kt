@@ -76,7 +76,6 @@ class SignUp : AppCompatActivity() {
             errorMsg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
                 binding.EmailInputLayout.error = "Check your info"
-                // بنرجع الزرار تاني لو حصل إيرور عشان اليوزر يقدر يجرب تاني
                 binding.loginButton2.isEnabled = true
                 binding.loginButton2.text = "Register"
             }
@@ -115,7 +114,6 @@ class SignUp : AppCompatActivity() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             val fcmToken = if (task.isSuccessful) task.result else ""
 
-            // 🌟 السطر ده اللي هيطبعلك التوكن في اللوج كات
             Log.d("MY_REAL_TOKEN", "FCM Token is: $fcmToken")
 
             val request = RegisterRequest(name, email, password, fcmToken)

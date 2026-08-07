@@ -6,5 +6,5 @@ data class RegisterRequest(
     @SerializedName("name") val name: String,
     @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,
-    @SerializedName("fcmToken") val fcmToken: String // 🌟 رجعنا التوكن هنا
+    @SerializedName("fcmToken") val fcmToken: String 
 )

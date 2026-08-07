@@ -62,7 +62,6 @@ class LoginActivity : AppCompatActivity() {
                 TokenManager.saveRefreshToken(this, it.refreshToken)
                 Toast.makeText(this, "Welcome ${it.name}!", Toast.LENGTH_SHORT).show()
 
-                // هننقل اليوزر علطول للرئيسية، التوكن خلاص اتبعت مع الـ Login
                 navigateToMain()
             }
         }
@@ -83,7 +82,6 @@ class LoginActivity : AppCompatActivity() {
         if (validateInputs(email, password)) {
             setLoadingState(true)
 
-            // 🌟 رجعنا الطريقة الطبيعية: هنسحب التوكن من غير ما نمسح القديم عشان الاتصال يفضل شغال
             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
                 val fcmToken = if (task.isSuccessful) task.result else ""
 

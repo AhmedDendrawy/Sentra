@@ -33,7 +33,6 @@ class AlertsFragment : Fragment() {
         setupSwipeRefresh()
         setupObservers()
 
-        // بنطلب الداتا أول ما الشاشة تفتح
         viewModel.fetchIncidents()
 
         return binding.root
@@ -42,7 +41,6 @@ class AlertsFragment : Fragment() {
     private fun setupRecyclerView() {
         binding.rvAlerts.layoutManager = LinearLayoutManager(context)
         adapter = AlertsAdapter(mutableListOf()) { clickedAlert ->
-            // هنا تقدر تبرمج ضغطة اليوزر على الإشعار من جوه الشاشة لو حابب
         }
         binding.rvAlerts.adapter = adapter
     }
@@ -61,7 +59,6 @@ class AlertsFragment : Fragment() {
             android.R.color.holo_orange_light,
             android.R.color.holo_red_light
         )
-        // 🌟 هنا بنلقط سحبة اليوزر للشاشة من فوق
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetchIncidents(isSwipeRefresh = true)
         }
@@ -77,13 +74,11 @@ class AlertsFragment : Fragment() {
             if (isLoading) {
                 binding.progressBar.visibility = View.VISIBLE
                 binding.layoutEmptyState.visibility = View.GONE
-                // 🌟 سيبنا الـ RecyclerView ظاهر عشان حركة السحب متقفش
             } else {
                 binding.progressBar.visibility = View.GONE
             }
         }
 
-        // 🌟 بنقفل علامة التحميل بتاعت السحب (الدايرة اللي بتنزل من فوق) لما الداتا توصل
         viewModel.isRefreshing.observe(viewLifecycleOwner) { isRefreshing ->
             binding.swipeRefreshLayout.isRefreshing = isRefreshing
         }
@@ -98,7 +93,6 @@ class AlertsFragment : Fragment() {
 
     private fun updateEmptyState(isEmpty: Boolean) {
         if (isEmpty) {
-            // 🌟 لو مفيش داتا، بنظهر شاشة الفراغ (Lottie) بس بنسيب الـ RecyclerView موجود ومخفي تحته عشان السحب يشتغل
             binding.rvAlerts.visibility = View.VISIBLE
             binding.layoutEmptyState.visibility = View.VISIBLE
         } else {

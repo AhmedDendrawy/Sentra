@@ -66,13 +66,11 @@ class AddCameraActivity : AppCompatActivity() {
             if (success) {
                 Toast.makeText(this, "Camera added successfully!", Toast.LENGTH_SHORT).show()
 
-                // 🌟 الخدعة السحرية: نبعت التوكن ونستنى الرد قبل ما نقفل الشاشة
                 FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val fcmToken = task.result
                         Log.d("SENTRA_TOKEN_TEST", "Sending Token to Backend: $fcmToken")
 
-                        // نستخدم lifecycleScope عشان نضمن إن الريكويست يخلص بأمان
                         lifecycleScope.launch(Dispatchers.IO) {
                             try {
                                 val apiService = RetrofitClient.getApiService(applicationContext)
@@ -88,7 +86,6 @@ class AddCameraActivity : AppCompatActivity() {
                                 Log.e("SENTRA_FCM", "⚠️ Crash in re-patch: ${e.message}")
                                 e.printStackTrace()
                             } finally {
-                                // 🌟 لازم نرجع للـ Main Thread عشان نقفل الشاشة بأمان
                                 withContext(Dispatchers.Main) {
                                     setResult(RESULT_OK)
                                     finish()
@@ -96,13 +93,11 @@ class AddCameraActivity : AppCompatActivity() {
                             }
                         }
                     } else {
-                        // لو فايربيز نفسه معلق، نقفل الشاشة برضه عشان اليوزر ميفضلش محبوس
                         Log.e("SENTRA_FCM", "❌ Firebase failed to get token")
                         setResult(RESULT_OK)
                         finish()
                     }
                 }
-                // ⚠️ مسحنا الـ finish() اللي كانت هنا بره عشان الشاشة متقفلش قبل ما الريكويست يخلص
             }
         }
 

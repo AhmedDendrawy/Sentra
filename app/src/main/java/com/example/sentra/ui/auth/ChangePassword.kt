@@ -59,14 +59,12 @@ class ChangePassword : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        // مراقبة التحميل
         viewModel.isLoading.observe(this) { isLoading ->
             progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             btnSave.isEnabled = !isLoading
             btnSave.text = if (isLoading) "Updating..." else "Update Password"
         }
 
-        // مراقبة النجاح
         viewModel.successMessage.observe(this) { msg ->
             msg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
@@ -74,7 +72,6 @@ class ChangePassword : AppCompatActivity() {
             }
         }
 
-        // مراقبة الأخطاء
         viewModel.errorMessage.observe(this) { errorMsg ->
             errorMsg?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
@@ -87,7 +84,6 @@ class ChangePassword : AppCompatActivity() {
         val newPass = etNewPass.text.toString().trim()
         val confirmPass = etConfirmPass.text.toString().trim()
 
-        // الـ Validation زي ما هو لأنه مسؤولية الـ UI
         if (currentPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             return
@@ -103,7 +99,6 @@ class ChangePassword : AppCompatActivity() {
             return
         }
 
-        // لو كله تمام، بنبعت الطلب للـ ViewModel
         val savedToken = TokenManager.getToken(this) ?: ""
         val requestBody = ChangePasswordRequest(currentPass, newPass)
 

@@ -40,7 +40,7 @@ class ManageCamerasViewModel(private val repository: ManageCamerasRepository) : 
                 if (response.isSuccessful && response.body() != null) {
                     _camerasList.value = response.body()
                 } else {
-                    _camerasList.value = emptyList() // عشان نظهر الـ Empty State
+                    _camerasList.value = emptyList() 
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Error: ${e.message}"
@@ -51,7 +51,6 @@ class ManageCamerasViewModel(private val repository: ManageCamerasRepository) : 
         }
     }
 
-    // تأكد من نوع الـ cameraId (هنا مفترضين إنه Int)
     fun deleteCamera(cameraId: Int) {
         _isLoading.value = true
         viewModelScope.launch {
@@ -59,7 +58,7 @@ class ManageCamerasViewModel(private val repository: ManageCamerasRepository) : 
                 val response = repository.deleteCamera(cameraId)
                 if (response.isSuccessful) {
                     _deleteSuccess.value = true
-                    fetchCameras() // بنعمل Refresh للقائمة أوتوماتيك بعد المسح
+                    fetchCameras() 
                 } else {
                     _errorMessage.value = "Failed to delete"
                 }
@@ -97,7 +96,6 @@ class ManageCamerasViewModel(private val repository: ManageCamerasRepository) : 
                 if (response.isSuccessful) {
                     _addSuccess.value = true
                 } else {
-                    // نقلنا اللوجيك بتاعك هنا عشان نقرأ الإيرور من الباك إند
                     var backendErrorMsg = "Failed to add camera"
                     try {
                         val errorBodyString = response.errorBody()?.string()

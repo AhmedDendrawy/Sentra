@@ -20,7 +20,6 @@ class HomeViewModel(private val repository: CamerasRepository) : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
 
-    // 🌟 دي عشان نهندل حالة لو السيشن خلصت (401)
     private val _unauthorizedEvent = MutableLiveData<Boolean>()
     val unauthorizedEvent: LiveData<Boolean> get() = _unauthorizedEvent
 
@@ -29,7 +28,6 @@ class HomeViewModel(private val repository: CamerasRepository) : ViewModel() {
 
         viewModelScope.launch {
             try {
-                // بنجيب الكاميرات من الـ Repository اللي إنت عامله
                 val response = repository.getCameras()
 
                 if (response.isSuccessful) {
@@ -37,7 +35,7 @@ class HomeViewModel(private val repository: CamerasRepository) : ViewModel() {
                 } else {
                     when (response.code()) {
                         401 -> _unauthorizedEvent.value = true
-                        404 -> _camerasList.value = emptyList() // لو 404 معناها مفيش كاميرات، فبنبعت لستة فاضية
+                        404 -> _camerasList.value = emptyList()
                         else -> _errorMessage.value = "Server error: ${response.code()}"
                     }
                 }

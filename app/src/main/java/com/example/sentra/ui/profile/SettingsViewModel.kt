@@ -17,7 +17,6 @@ class SettingsViewModel(private val repository: SettingsRepository) : ViewModel(
     private val _userEmail = MutableLiveData<String>()
     val userEmail: LiveData<String> get() = _userEmail
 
-    // عشان نبلغ الشاشة إن الخروج تم بنجاح
     private val _logoutEvent = MutableLiveData<Boolean>()
     val logoutEvent: LiveData<Boolean> get() = _logoutEvent
 
@@ -31,14 +30,10 @@ class SettingsViewModel(private val repository: SettingsRepository) : ViewModel(
 
         viewModelScope.launch {
             try {
-                // 1. نبلغ السيرفر بالخروج
                 repository.logoutRemote(refreshToken)
             } catch (e: Exception) {
-                // حتى لو السيرفر وقع، بنكمل مسح الداتا عشان اليوزر يعرف يخرج
             } finally {
-                // 2. نمسح توكن فايربيز من الموبايل
                 FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener {
-                    // 3. نمسح الـ SharedPreferences ونبلغ الـ Fragment
                     repository.clearLocalData()
                     _logoutEvent.value = true
                 }

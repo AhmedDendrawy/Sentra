@@ -1,4 +1,4 @@
-package com.example.sentra.data.repo // تأكد إن المسار صح حسب مشروعك
+package com.example.sentra.data.repo 
 
 import com.example.sentra.api.ApiService
 import com.example.sentra.data.model.CameraItem

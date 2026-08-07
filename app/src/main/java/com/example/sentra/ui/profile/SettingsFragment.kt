@@ -61,21 +61,17 @@ class SettingsFragment : Fragment() {
             viewModel.logout()
         }
 
-        // 🌟 فتح خزانة الإعدادات
         val sharedPrefs = requireContext().getSharedPreferences("SentraSettings", Context.MODE_PRIVATE)
 
-        // 🌟 قراءة الحالة الحالية للزراير (الافتراضي: شغال true)
         binding.switchNotifications.isChecked = sharedPrefs.getBoolean("enable_notifications", true)
         binding.switchSounds.isChecked = sharedPrefs.getBoolean("enable_sounds", true)
 
-        // 🌟 حفظ اختيار اليوزر للإشعارات
         binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
             sharedPrefs.edit().putBoolean("enable_notifications", isChecked).apply()
             val msg = if (isChecked) "Notifications Enabled" else "Notifications Disabled"
             Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         }
 
-        // 🌟 حفظ اختيار اليوزر للصوت
         binding.switchSounds.setOnCheckedChangeListener { _, isChecked ->
             sharedPrefs.edit().putBoolean("enable_sounds", isChecked).apply()
             val msg = if (isChecked) "Sounds Enabled" else "Sounds Disabled"

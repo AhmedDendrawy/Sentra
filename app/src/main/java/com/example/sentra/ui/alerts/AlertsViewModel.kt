@@ -14,18 +14,15 @@ class AlertsViewModel(private val repository: AlertsRepository) : ViewModel() {
     private val _alertsList = MutableLiveData<List<AlertItem>>()
     val alertsList: LiveData<List<AlertItem>> get() = _alertsList
 
-    // حالة التحميل العادية (الدايرة اللي في النص)
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    // 🌟 حالة السحب للتحديث (عشان الدايرة اللي بتنزل من فوق)
     private val _isRefreshing = MutableLiveData<Boolean>()
     val isRefreshing: LiveData<Boolean> get() = _isRefreshing
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
 
-    // 🌟 ضفنا متغير isSwipeRefresh عشان نعرف الريكويست جاي منين
     fun fetchIncidents(isSwipeRefresh: Boolean = false) {
         if (isSwipeRefresh) {
             _isRefreshing.value = true
@@ -49,7 +46,6 @@ class AlertsViewModel(private val repository: AlertsRepository) : ViewModel() {
             } catch (e: Exception) {
                 _errorMessage.value = "Network Error: Check your connection"
             } finally {
-                // بنقفل علامات التحميل في كل الحالات
                 _isLoading.value = false
                 _isRefreshing.value = false
             }

@@ -26,7 +26,6 @@ class ChangePasswordViewModel(private val repository: AuthRepository) : ViewMode
             try {
                 val response = repository.changePassword(token, request)
                 if (response.isSuccessful) {
-                    // لو الباك إند باعت رسالة نجاح في الـ response body بنعرضها، لو لأ بنعرض رسالة ثابتة
                     _successMessage.value = response.body()?.message ?: "Password changed successfully"
                 } else {
                     _errorMessage.value = "Current password is incorrect"
