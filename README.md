@@ -21,7 +21,7 @@ This project strictly follows modern Android development practices and clean cod
 * **Architecture:** MVVM (Model-View-ViewModel) for clear separation of concerns and testability.
 * **UI:** XML Layouts
 * **Backend/Services:** Firebase (Cloud Messaging / Notifications)
-* **Asynchronous Programming:** Kotlin Coroutines & Flows
+* **Asynchronous Programming**: Kotlin Coroutines & LiveData
 
 ## 🏗 Architecture Overview
 
