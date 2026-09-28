@@ -11,7 +11,7 @@ Sentra is a robust mobile application built to provide seamless surveillance cap
 * **Real-Time Monitoring:** Continuous network integration for live event tracking.
 * **Instant Notifications:** Integrated with Firebase Cloud Messaging (FCM) to deliver immediate alerts.
 * **Background Processing:** Utilizes background polling mechanisms for uninterrupted state updates.
-* **Clean UI:** Responsive and intuitive user interface built with standard Android XML layouts.
+* **Clean UI:** Responsive and intuitive user interface built with standard Android XML layouts, featuring smooth animations.
 
 ## 🛠 Tech Stack & Architecture
 
@@ -19,7 +19,7 @@ This project strictly follows modern Android development practices and clean cod
 
 * **Language:** Kotlin
 * **Architecture:** MVVM (Model-View-ViewModel) for clear separation of concerns and testability.
-* **UI:** XML Layouts
+* **UI:** XML Layouts & Lottie Animations (Animated Splash Screen)
 * **Backend/Services:** Firebase (Cloud Messaging / Notifications)
 * **Asynchronous Programming**: Kotlin Coroutines & LiveData
 
@@ -32,9 +32,9 @@ The app is structured using the **MVVM** pattern:
 
 ## 📸 Screenshots
 
-| Splash Screen | Onboarding  | Onboarding  | Onboarding |
+| Splash Screen (Animated) | Onboarding  | Onboarding  | Onboarding |
 | :---: | :---: | :---: | :---: |
-| <img width="200" alt="splash" src="https://github.com/user-attachments/assets/2963a846-4dec-4e39-b87d-be8dbc9dbb25" /> | <img width="200" alt="Screenshot_20260219_192513" src="https://github.com/user-attachments/assets/2c5c71e5-3bf7-4887-a6bf-f1598e037d23" /> | <img width="200" alt="Screenshot_20260219_192506" src="https://github.com/user-attachments/assets/f9fe90de-5da5-4e79-8f4e-2de619e2dca6" /> | <img width="200" alt="Screenshot_20260219_192420" src="https://github.com/user-attachments/assets/5ac4fe74-b5c9-4377-a394-762384c6b78e" /> |
+| <img width="200" alt="splash-animation" src="https://github.com/user-attachments/assets/6247b76b-4e70-4f87-9846-4d56827f3430" /> | <img width="200" alt="Screenshot_20260219_192513" src="https://github.com/user-attachments/assets/2c5c71e5-3bf7-4887-a6bf-f1598e037d23" /> | <img width="200" alt="Screenshot_20260219_192506" src="https://github.com/user-attachments/assets/f9fe90de-5da5-4e79-8f4e-2de619e2dca6" /> | <img width="200" alt="Screenshot_20260219_192420" src="https://github.com/user-attachments/assets/5ac4fe74-b5c9-4377-a394-762384c6b78e" /> |
 
 | Login | Home | Alerts | Live Stream |
 | :---: | :---: | :---: | :---: |
@@ -42,4 +42,3 @@ The app is structured using the **MVVM** pattern:
 
 ## 👨‍💻 Developer
 Developed by **Ahmed Dandrawy Sleem** as a BSc Computer Science Graduation Project.
-
